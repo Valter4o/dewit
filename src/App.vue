@@ -1,28 +1,48 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app id="inspire">
+    <Sidebar v-if="sidebar" />
+
+    <Navbar @changeSideBar="sidebar = !sidebar" />
+
+    <v-content>
+      <router-view />
+    </v-content>
+
+    <Footer />
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Sidebar from './components/Sidebar';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 export default {
-  name: 'app',
   components: {
-    HelloWorld
-  }
-}
+    Sidebar,
+    Navbar,
+    Footer
+  },
+
+  data() {
+    return {
+      sidebar: false,
+    }
+  },
+
+  created() {
+    this.$vuetify.theme.dark = true
+  },
+
+};
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+v-content {
+  margin-left: 500px;
+}
+
+.title {
+  word-break: break-all;
 }
 </style>
