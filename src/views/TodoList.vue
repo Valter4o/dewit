@@ -1,91 +1,92 @@
 <template>
   <div>
-    <v-container fluid>
+    <v-container :class="$style.todoContainer">
       <h1 :class="$style.headerLarge">
         Your todo list
       </h1>
 
       <v-simple-table>
-        <template>
-          <tbody>
-            <tr
-              v-for="todo in todoList"
-              :key="todoList.indexOf(todo)"
+        <v-row
+          v-for="todo in todoList"
+          :class="$style.table"
+          :key="todoList.indexOf(todo)"
+        >
+          <td>
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              small
+              color="primary"
+              @click="removeTodo(todo)"
             >
-              <td>{{ todo.value }}</td>
-            </tr>
-          </tbody>
-        </template>
+              <v-icon dark>mdi-minus</v-icon>
+            </v-btn>
+            {{ todo.value }}
+          </td>
+        </v-row>
       </v-simple-table>
-
-      <br>
-
-      <v-row>
-        <v-text-field
-          v-model="newTodoValue"
-          :placeholder="placeholder"
-          :clearable="clearable"
-          @keyup.13="submit()"
-        />
-      </v-row>
-
-      <button @click="submit()">
-        Submit
-      </button>
+      <AppTodoDialog v-if="dialog" />
+      <v-btn dark fab color="red" @click="dialog = !dialog">
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
     </v-container>
   </div>
 </template>
 
 <script>
+import AppTodoDialog from '../components/AddTodoDialog';
+import { bus } from '../main';
+
 export default {
   name: 'TodoList',
+  components: {
+    AppTodoDialog
+  },
+
   data() {
     return {
       todoList: [
-        //
         {
-          value: 'Todo1'
+          value: 'Todo 1'
         },
         {
-          value: 'Todo2'
-        },
+          value: 'Todo 2'
+        }
       ],
-      newTodoValue: '',
-      placeholder: 'Add todo',
-      clearable: true,
+      dialog: false
     }
   },
 
   methods: {
-    submit() {
-      if (this.newTodoValue) {
+    submit(value) {
+      if (value) {
         const todo = {};
-        this.$set(todo, 'value', this.newTodoValue)
+        this.$set(todo, 'value', value)
         this.todoList.push(todo);
-        this.newTodoValue = '';
       }
     },
+
+    removeTodo(todo) {
+      this.todoList = this.todoList.filter((el) => el !== todo);
+    },
   },
+  created() {
+    bus.$on('submit', ({ value }) => {
+      this.submit(value);
+    })
+  }
 }
 </script>
 
 <style module>
-v-simple-table {
-  height: 200px;
-  font-size: 50px;
+.table {
+  width: 500px;
+  overflow: hidden;
+  margin-left: 300px;
 }
 
 .headerLarge {
-  font-size: 80px;
-}
-
-.todoText {
-  font-size: 40px;
-}
-
-.todoInput {
-  height: 50px;
-  width: 500px;
-  font-size: 40px;
+  font-size: 60px;
 }
 </style>
