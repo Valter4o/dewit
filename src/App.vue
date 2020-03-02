@@ -4,7 +4,7 @@
 
     <Navbar @changeSideBar="sidebar = !sidebar" />
 
-    <v-content>
+    <v-content align="center" justify="center">
       <router-view />
     </v-content>
 
@@ -39,7 +39,10 @@ export default {
 
 <style>
 v-content {
-  margin-left: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 
 .title {
