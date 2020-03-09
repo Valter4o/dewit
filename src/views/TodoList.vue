@@ -20,9 +20,9 @@
               color="primary"
               @click="removeTodo(todo)"
             >
-              <v-icon dark>mdi-minus</v-icon>
+              <v-icon dark disabled="">mdi-heart</v-icon>
             </v-btn>
-            {{ todo.value }}
+            <span>{{ todo[1].value }}</span>
           </td>
         </v-row>
       </v-simple-table>
@@ -48,29 +48,36 @@ export default {
 
   data() {
     return {
-      todoList: [
-        {
-          value: 'Todo 1',
-        },
-        {
-          value: 'Todo 2',
-        },
-      ],
+      todoList: null,
       dialog: false,
+      db: firebase.database().ref('todos'),
     }
   },
 
   methods: {
     submit(value) {
       if (value) {
-        const todo = {}
-        this.$set(todo, 'value', value)
-        this.todoList.push(todo)
+        const todo = {
+          value,
+        }
+        // this.db.push(todo)
       }
+      firebase
+        .firestore()
+        .collection('projects')
+        .get()
+        .then((q) => {
+          q.forEach((d) => {
+            console.log(d.data())
+          })
+        })
+      // .onSnapshot((s) => {
+      //   console.log(s.data())
+      // })
     },
 
     removeTodo(todo) {
-      this.todoList = this.todoList.filter((el) => el !== todo)
+      // this.db.child(todo[0]).remove()
     },
   },
 
@@ -78,13 +85,10 @@ export default {
     bus.$on('submit', ({ value }) => {
       this.submit(value)
     })
-    const x = firebase
-      .database()
-      .ref('todos')
-      .on('value', (snapshot) => {
-        debugger
-        console.log(snapshot.val())
-      })
+    this.$store.dispatch('foo')
+    // const x = this.db.on('value', (snapshot) => {
+    //   this.todoList = Object.entries(snapshot.val())
+    // })
   },
 }
 </script>
