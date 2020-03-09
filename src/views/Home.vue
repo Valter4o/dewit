@@ -12,7 +12,7 @@
       :headers="headers"
       :items="projects"
       :hide-default-footer="true"
-      @click:row="foo"
+      @click:row="redirectProject"
     >
     </v-data-table>
   </div>
@@ -45,6 +45,9 @@ export default {
           value: 'status',
         },
       ],
+
+      projectsIds: ['I0vvw9J5qf2iE6TLm4tE', 'pMuKmca0quyLalax6JF5'],
+      key: 'z2LIjPKBL1iDKMal7g1c',
     }
   },
 
@@ -52,21 +55,42 @@ export default {
 
   computed: {
     projects() {
-      return Object.entries(this.$store.state.projects.items).map((el) => el[1])
+      const displayProjects = []
+      const projects = Object.entries(this.$store.state.projects.items)
+        .map((el) => el[1])
+        .forEach(({ name, users }) => {
+          const { role, status } = users.find(
+            (user) => user._key === this.key
+            //Todo: Replace with authenticated user id
+          )
+
+          if (role && status) {
+            const validObj = {
+              name,
+              participants: users.length,
+              role,
+              status,
+            }
+            displayProjects.push(validObj)
+          }
+        })
+      return displayProjects
     },
   },
 
   methods: {
-    foo(d) {
-      console.log(d)
+    redirectProject(project) {
+      console.log(`TI KLIKNA ${project.name}`)
     },
     ...mapActions('projects', ['fetchProjects']),
   },
 
   created() {
-    this.fetchProjects().then(() => {
-      this.asyncDataStatus_fetched()
-    })
+    this.fetchProjects({ ids: this.projectsIds, recource: 'projects' }).then(
+      () => {
+        this.asyncDataStatus_fetched()
+      }
+    )
   },
 }
 </script>
