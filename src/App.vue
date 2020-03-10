@@ -13,15 +13,15 @@
 </template>
 
 <script>
-import Sidebar from './components/Sidebar';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import Sidebar from './components/TheSidebar'
+import Navbar from './components/TheNavbar'
+import Footer from './components/TheFooter'
 
 export default {
   components: {
     Sidebar,
     Navbar,
-    Footer
+    Footer,
   },
 
   data() {
@@ -31,10 +31,9 @@ export default {
   },
 
   created() {
-    this.$vuetify.theme.dark = true
+    this.$vuetify.theme.dark = false
   },
-
-};
+}
 </script>
 
 <style>
