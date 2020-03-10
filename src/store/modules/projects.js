@@ -1,6 +1,3 @@
-import firebase from 'firebase/app'
-import Vue from 'vue'
-
 export default {
     namespaced: true,
     state: {
@@ -10,6 +7,10 @@ export default {
     actions: {
         fetchProjects: ({ dispatch }, { ids }) =>
             dispatch('fetchItems', { ids, resource: 'projects' }, {
+                root: true
+            }),
+        fetchProject: ({ dispatch }, { id }) =>
+            dispatch('fetchItem', { id, resource: 'projects' }, {
                 root: true
             })
     }
