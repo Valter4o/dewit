@@ -11,9 +11,7 @@
           </p>
         </v-card-text>
         <v-card-actions :class="$style.buttonsContainer">
-          <router-link
-            :to="{ name: 'TodoGroups', params: { ids: project.todoGroups } }"
-          >
+          <router-link :to="{ name: 'TodoGroups', params: { id } }">
             <v-btn text rounded="rounded" color="deep-purple">
               Todo List
             </v-btn>
