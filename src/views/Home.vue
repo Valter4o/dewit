@@ -5,7 +5,7 @@
     </h1>
     <p :class="$style.textLarge">
       <!--  -->
-      Welcome to the best todo list you have ever seen
+      Welcome to the best project manager you have ever seen
     </p>
 
     <v-data-table
@@ -46,7 +46,7 @@ export default {
         },
       ],
 
-      projectsIds: ['I0vvw9J5qf2iE6TLm4tE', 'pMuKmca0quyLalax6JF5'],
+      projectsIds: ['I0vvw9J5qf2iE6TLm4tE'],
       key: 'z2LIjPKBL1iDKMal7g1c',
     }
   },
@@ -56,9 +56,8 @@ export default {
   computed: {
     projects() {
       const displayProjects = []
-      const projects = Object.entries(this.$store.state.projects.items)
-        .map((el) => el[1])
-        .forEach(({ name, users }) => {
+      const projects = Object.entries(this.$store.state.projects.items).forEach(
+        ([id, { name, users }]) => {
           const { role, status } = users.find(
             (user) => user._key === this.key
             //Todo: Replace with authenticated user id
@@ -70,27 +69,32 @@ export default {
               participants: users.length,
               role,
               status,
+              id,
             }
             displayProjects.push(validObj)
           }
-        })
+        }
+      )
       return displayProjects
     },
   },
 
   methods: {
     redirectProject(project) {
-      console.log(`TI KLIKNA ${project.name}`)
+      this.$router.push({
+        name: 'ProjectHome',
+        params: {
+          id: project.id,
+        },
+      })
     },
     ...mapActions('projects', ['fetchProjects']),
   },
 
   created() {
-    this.fetchProjects({ ids: this.projectsIds, recource: 'projects' }).then(
-      () => {
-        this.asyncDataStatus_fetched()
-      }
-    )
+    this.fetchProjects({ ids: this.projectsIds }).then(() => {
+      this.asyncDataStatus_fetched()
+    })
   },
 }
 </script>
