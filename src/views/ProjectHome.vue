@@ -11,18 +11,18 @@
           </p>
         </v-card-text>
         <v-card-actions :class="$style.buttonsContainer">
-          <router-link :to="{ name: 'TodoGroups', params: { id } }">
-            <v-btn text rounded="rounded" color="deep-purple">
-              Todo List
-            </v-btn>
-          </router-link>
           <router-link :to="{ name: 'UsersList' }">
-            <v-btn text rounded="rounded" color="deep-purple">
+            <v-btn text rounded="rounded" max-width="200px" color="deep-purple">
               Users List
             </v-btn>
           </router-link>
+          <router-link :to="{ name: 'TodoGroups', params: { id } }">
+            <v-btn text rounded="rounded" max-width="200px" color="deep-purple">
+              Todo List
+            </v-btn>
+          </router-link>
           <router-link :to="{ name: 'Tasker' }">
-            <v-btn text rounded="rounded" color="deep-purple">
+            <v-btn text rounded="rounded" max-width="200px" color="deep-purple">
               Tasker
             </v-btn>
           </router-link>
@@ -72,6 +72,6 @@ export default {
 
 <style module>
 .buttonsContainer {
-  justify-content: space-between;
+  justify-content: center;
 }
 </style>
