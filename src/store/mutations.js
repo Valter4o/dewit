@@ -1,4 +1,3 @@
-import firebase from 'firebase/app'
 import Vue from 'vue'
 
 export default {
