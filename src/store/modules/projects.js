@@ -6,11 +6,15 @@ export default {
 
     actions: {
         fetchProjects: ({ dispatch }, { ids }) =>
-            dispatch('fetchItems', { ids, resource: 'projects' }, {
+            dispatch('fetchItems', {
+                ids, resource: 'projects'
+            }, {
                 root: true
             }),
         fetchProject: ({ dispatch }, { id }) =>
-            dispatch('fetchItem', { id, resource: 'projects' }, {
+            dispatch('fetchItem', {
+                id, resource: 'projects'
+            }, {
                 root: true
             })
     }
