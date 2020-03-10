@@ -7,9 +7,9 @@
 
       <v-simple-table>
         <v-row
-          v-for="todo in todoList"
+          v-for="todo in todos"
           :class="$style.tableRow"
-          :key="todoList.indexOf(todo)"
+          :key="todos.indexOf(todo)"
         >
           <td>
             <v-btn
@@ -22,7 +22,7 @@
             >
               <v-icon dark disabled="">mdi-heart</v-icon>
             </v-btn>
-            <span>{{ todo[1].value }}</span>
+            <span>{{ todo.value }}</span>
           </td>
         </v-row>
       </v-simple-table>
@@ -39,6 +39,8 @@
 import AppTodoDialog from '../components/AddTodoDialog'
 import { bus } from '../main'
 import firebase from 'firebase'
+import { mapActions } from 'vuex'
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
   name: 'TodoList',
@@ -48,47 +50,36 @@ export default {
 
   data() {
     return {
-      todoList: null,
       dialog: false,
-      db: firebase.database().ref('todos'),
     }
   },
 
-  methods: {
-    submit(value) {
-      if (value) {
-        const todo = {
-          value,
-        }
-        // this.db.push(todo)
-      }
-      firebase
-        .firestore()
-        .collection('projects')
-        .get()
-        .then((q) => {
-          q.forEach((d) => {
-            console.log(d.data())
-          })
-        })
-      // .onSnapshot((s) => {
-      //   console.log(s.data())
-      // })
-    },
-
-    removeTodo(todo) {
-      // this.db.child(todo[0]).remove()
+  props: {
+    id: {
+      type: String,
+      required: true,
     },
   },
 
+  mixins: [asyncDataStatus],
+
+  computed: {
+    todos() {
+      return this.$store.state.todoGroups.items[this.id].todos
+    },
+  },
+
+  methods: {
+    submit(value) {},
+
+    removeTodo(todo) {},
+    ...mapActions('todoGroups', ['fetchGroup']),
+  },
+
   created() {
-    bus.$on('submit', ({ value }) => {
-      this.submit(value)
+    this.fetchGroup({ id: this.id }).then(() => {
+      this.asyncDataStatus_fetched()
     })
-    this.$store.dispatch('foo')
-    // const x = this.db.on('value', (snapshot) => {
-    //   this.todoList = Object.entries(snapshot.val())
-    // })
   },
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="asyncDataStatus_ready">
     <h1>Your Todo Groups</h1>
     <br />
     <v-card class="mx-auto" max-width="700">
@@ -29,38 +29,47 @@
 
 <script>
 import { mapActions } from 'vuex'
+import asyncDataStatus from '@/mixins/asyncDataStatus'
+
 export default {
-  data() {
-    return {
-      groups: [
-        {
-          _key: 0,
-          name: 'Group 1',
-          todos: ['Todo 1', 'Todo 2'],
-        },
-        {
-          _key: 1,
-          name: 'Group 2',
-          todos: ['Todo 1'],
-        },
-      ],
-    }
-  },
+  mixins: [asyncDataStatus],
 
   props: {
-    ids: {
-      type: Array,
+    id: {
+      type: String,
       required: true,
+    },
+  },
+
+  computed: {
+    ids() {
+      return this.$store.state.projects.items[this.id].todoGroups
+    },
+
+    groups() {
+      const groups = Object.entries(this.$store.state.todoGroups.items).map(
+        (group) => group[1]
+      )
+      return groups
     },
   },
 
   methods: {
     showTodoList(id) {
-      console.log(id)
+      this.$router.push({
+        name: 'TodoList',
+        params: {
+          id,
+        },
+      })
     },
-    ...mapActions[('todoGroups', ['fetchGroups'])],
+    ...mapActions('todoGroups', ['fetchGroups']),
   },
 
-  created() {},
+  created() {
+    this.fetchGroups({ ids: this.ids }).then(() => {
+      this.asyncDataStatus_fetched()
+    })
+  },
 }
 </script>
