@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div v-if="asyncDataStatus_ready">
     <v-container :class="$style.todoContainer">
       <h1 :class="$style.headerLarge">
-        Your todo list
+        {{ groupName }}
       </h1>
 
       <v-simple-table>
@@ -51,6 +51,7 @@ export default {
   data() {
     return {
       dialog: false,
+      groupItems: this.$store.state.todoGroups.items,
     }
   },
 
@@ -61,13 +62,16 @@ export default {
     },
   },
 
-  mixins: [asyncDataStatus],
-
   computed: {
+    groupName() {
+      return this.groupItems[this.id].name
+    },
     todos() {
-      return this.$store.state.todoGroups.items[this.id].todos
+      return this.groupItems[this.id].todos
     },
   },
+
+  mixins: [asyncDataStatus],
 
   methods: {
     submit(value) {},
