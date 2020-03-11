@@ -1,3 +1,5 @@
+import firebase from 'firebase';
+
 export default {
     namespaced: true,
     state: {
@@ -18,6 +20,10 @@ export default {
                 resource: 'todoGroups'
             }, {
                 root: true
-            })
+            }),
+
+        createTodo(_, { todos, groupId }) {
+            firebase.firestore().collection('todoGroups').doc(groupId).update({ todos })
+        },
     }
 }
