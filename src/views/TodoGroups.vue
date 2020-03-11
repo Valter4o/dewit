@@ -64,11 +64,14 @@ export default {
       })
     },
     ...mapActions('todoGroups', ['fetchGroups']),
+    ...mapActions('projects', ['fetchProject']),
   },
 
   created() {
-    this.fetchGroups({ ids: this.ids }).then(() => {
-      this.asyncDataStatus_fetched()
+    this.fetchProject({ id: this.id }).then(() => {
+      this.fetchGroups({ ids: this.ids }).then(() => {
+        this.asyncDataStatus_fetched()
+      })
     })
   },
 }
