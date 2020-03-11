@@ -39,15 +39,17 @@ export default {
 
   methods: {
     submit() {
-      const todo = {
-        value: this.newTodoValue,
-        marked: false,
-      }
-      const todos = this.todos
-      todos.push(todo)
+      if (this.newTodoValue) {
+        const todo = {
+          value: this.newTodoValue,
+          marked: false,
+        }
+        const todos = this.todos
+        todos.push(todo)
 
-      this.createTodo({ todos, groupId: this.groupId })
-      this.newTodoValue = ''
+        this.createTodo({ todos, groupId: this.groupId })
+        this.newTodoValue = ''
+      }
     },
     ...mapActions('todoGroups', ['createTodo']),
   },
