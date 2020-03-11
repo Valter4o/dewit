@@ -5,7 +5,6 @@ import mutations from './mutations'
 import projects from './modules/projects'
 import todoGroups from './modules/todoGroups'
 import tasker from './modules/tasker'
-import userList from './modules/userList'
 
 Vue.use(Vuex)
 
@@ -17,7 +16,6 @@ export default new Vuex.Store({
     projects,
     todoGroups,
     tasker,
-    userList
   },
 
   getters: {
