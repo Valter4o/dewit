@@ -23,7 +23,17 @@ export default {
             }),
 
         createTodo(_, { todos, groupId }) {
-            firebase.firestore().collection('todoGroups').doc(groupId).update({ todos })
+            firebase.firestore()
+                .collection('todoGroups')
+                .doc(groupId)
+                .update({ todos })
+        },
+
+        updateTodo(_, { todos, groupId }) {
+            firebase.firestore()
+                .collection('todoGroups')
+                .doc(groupId)
+                .update({ todos })
         },
     }
 }
