@@ -8,24 +8,38 @@
       <v-simple-table>
         <v-row
           v-for="todo in todos"
-          :class="$style.tableRow"
+          :class="
+            todo.marked ? $style.tableRowChecked : $style.tableRowNotChecked
+          "
           :key="todos.indexOf(todo)"
         >
           <td>
             <v-btn
               class="mx-2"
               fab
-              dark
               small
               color="primary"
-              @click="removeTodo(todo)"
+              @click="checkTodo(todo)"
             >
-              <v-icon dark disabled="">mdi-heart</v-icon>
+              <template v-if="todo.marked">
+                <Check />
+              </template>
+            </v-btn>
+            <v-btn
+              v-if="todo.marked"
+              class="mx-2"
+              fab
+              small
+              color="primary"
+              @click="deleteTodo(todo)"
+            >
+              <DeathStar />
             </v-btn>
             <span>{{ todo.value }}</span>
           </td>
         </v-row>
       </v-simple-table>
+
       <AppTodoDialog v-if="dialog" />
 
       <v-btn dark fab color="red" @click="dialog = !dialog">
@@ -41,11 +55,15 @@ import { bus } from '../main'
 import firebase from 'firebase'
 import { mapActions } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
+import Check from 'vue-material-design-icons/Check'
+import DeathStar from 'vue-material-design-icons/DeathStar'
 
 export default {
   name: 'TodoList',
   components: {
     AppTodoDialog,
+    Check,
+    DeathStar,
   },
 
   data() {
@@ -74,10 +92,15 @@ export default {
   mixins: [asyncDataStatus],
 
   methods: {
-    submit(value) {},
-
-    removeTodo(todo) {},
-    ...mapActions('todoGroups', ['fetchGroup']),
+    checkTodo(todo) {
+      todo.marked = !todo.marked
+      this.updateTodo({ todos: this.todos, groupId: this.id })
+    },
+    deleteTodo(todo) {
+      const todos = this.todos.filter((td) => td !== todo)
+      this.updateTodo({ todos, groupId: this.id })
+    },
+    ...mapActions('todoGroups', ['fetchGroup', 'updateTodo']),
   },
 
   created() {
@@ -89,10 +112,15 @@ export default {
 </script>
 
 <style module>
-.tableRow {
+.tableRowNotChecked,
+.tableRowChecked {
   width: 500px;
   overflow: hidden;
   margin-left: 300px;
+}
+
+.tableRowChecked {
+  text-decoration: line-through;
 }
 
 .headerLarge {
