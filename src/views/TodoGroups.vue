@@ -4,24 +4,22 @@
     <br />
     <v-card class="mx-auto" max-width="700">
       <v-simple-table>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-center">Name</th>
-              <th class="text-center">Todos</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="group in groups"
-              :key="group['_key']"
-              @click="showTodoList(group['_key'])"
-            >
-              <td>{{ group.name }}</td>
-              <td>{{ group.todos.length }}</td>
-            </tr>
-          </tbody>
-        </template>
+        <thead>
+          <tr>
+            <th class="text-center">Name</th>
+            <th class="text-center">Todos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="group in groups"
+            :key="group['_key']"
+            @click="showTodoList(group['_key'])"
+          >
+            <td>{{ group.name }}</td>
+            <td>{{ group.todos.length }}</td>
+          </tr>
+        </tbody>
       </v-simple-table>
     </v-card>
   </div>
