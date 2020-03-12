@@ -19,6 +19,7 @@
                 max-width="200px"
                 color="deep-purple"
               >
+                <AccountDetails />
                 Users List
               </v-btn>
             </router-link>
@@ -29,6 +30,7 @@
                 max-width="200px"
                 color="deep-purple"
               >
+                <CheckBoxMultipleOutline />
                 Todo List
               </v-btn>
             </router-link>
@@ -39,6 +41,8 @@
                 max-width="200px"
                 color="deep-purple"
               >
+                <InboxFull />
+
                 Tasker
               </v-btn>
             </router-link>
@@ -79,8 +83,16 @@
 <script>
 import { mapActions } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
+import InboxFull from 'vue-material-design-icons/InboxFull'
+import CheckBoxMultipleOutline from 'vue-material-design-icons/CheckBoxMultipleOutline'
+import AccountDetails from 'vue-material-design-icons/AccountDetails'
 
 export default {
+  components: {
+    InboxFull,
+    CheckBoxMultipleOutline,
+    AccountDetails,
+  },
   data() {
     return {
       rounded: true,
@@ -108,11 +120,12 @@ export default {
   },
 
   created() {
-    this.fetchProject({ id: this.id }).then(() => {
-      setTimeout(() => {
+    const request = this.fetchProject({ id: this.id })
+    setTimeout(() => {
+      request.then(() => {
         this.asyncDataStatus_fetched()
-      }, 1000)
-    })
+      })
+    }, 1000)
   },
 }
 </script>
