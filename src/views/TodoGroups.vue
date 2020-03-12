@@ -1,8 +1,8 @@
 <template>
-  <div v-if="asyncDataStatus_ready">
+  <div>
     <h1>Your Todo Groups</h1>
     <br />
-    <v-card class="mx-auto" max-width="700">
+    <v-card class="mx-auto" max-width="700" v-if="asyncDataStatus_ready">
       <v-simple-table>
         <thead>
           <tr>
@@ -22,6 +22,14 @@
         </tbody>
       </v-simple-table>
     </v-card>
+
+    <v-progress-circular
+      v-else
+      :width="5"
+      size="70"
+      color="green"
+      indeterminate
+    ></v-progress-circular>
   </div>
 </template>
 
@@ -68,7 +76,9 @@ export default {
   created() {
     this.fetchProject({ id: this.id }).then(() => {
       this.fetchGroups({ ids: this.ids }).then(() => {
-        this.asyncDataStatus_fetched()
+        setTimeout(() => {
+          this.asyncDataStatus_fetched()
+        }, 1000)
       })
     })
   },

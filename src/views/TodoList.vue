@@ -1,6 +1,6 @@
 <template>
-  <div v-if="asyncDataStatus_ready">
-    <v-container :class="$style.todoContainer">
+  <div>
+    <v-container :class="$style.todoContainer" v-if="asyncDataStatus_ready">
       <h1 :class="$style.headerLarge">
         {{ groupName }}
       </h1>
@@ -46,6 +46,15 @@
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-container>
+
+    <v-progress-circular
+      :class="$style.spinner"
+      v-else
+      :width="5"
+      size="70"
+      color="green"
+      indeterminate
+    ></v-progress-circular>
   </div>
 </template>
 
@@ -105,7 +114,9 @@ export default {
 
   created() {
     this.fetchGroup({ id: this.id }).then(() => {
-      this.asyncDataStatus_fetched()
+      setTimeout(() => {
+        this.asyncDataStatus_fetched()
+      }, 1000)
     })
   },
 }
@@ -125,5 +136,9 @@ export default {
 
 .headerLarge {
   font-size: 60px;
+}
+
+.spinner {
+  margin-top: 100px;
 }
 </style>
