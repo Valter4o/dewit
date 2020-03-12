@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="asyncDataStatus_ready">
+  <div class="container">
     <h1 :class="$style.headerLarge">
       DEWIT
     </h1>
@@ -8,13 +8,21 @@
       Welcome to the best project manager you have ever seen
     </p>
 
-    <v-data-table
-      :headers="headers"
-      :items="projects"
-      :hide-default-footer="true"
-      @click:row="redirectProject"
-    >
-    </v-data-table>
+    <template v-if="asyncDataStatus_ready">
+      <v-data-table
+        :headers="headers"
+        :items="projects"
+        :hide-default-footer="true"
+        @click:row="redirectProject"
+      >
+      </v-data-table>
+    </template>
+    <template v-else>
+      <v-progress-linear
+        indeterminate
+        color="yellow darken-2"
+      ></v-progress-linear>
+    </template>
   </div>
 </template>
 
@@ -93,7 +101,9 @@ export default {
 
   created() {
     this.fetchProjects({ ids: this.projectsIds }).then(() => {
-      this.asyncDataStatus_fetched()
+      setTimeout(() => {
+        this.asyncDataStatus_fetched()
+      }, 1000)
     })
   },
 }
