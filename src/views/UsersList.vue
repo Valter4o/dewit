@@ -57,8 +57,9 @@ export default {
   },
 
   created() {
-    this.fetchProject({ id: this.id }).then(() => {
-      setTimeout(() => {
+    const request = this.fetchProject({ id: this.id })
+    setTimeout(() => {
+      request.then(() => {
         this.asyncDataStatus_fetched()
       }, 1000)
     })

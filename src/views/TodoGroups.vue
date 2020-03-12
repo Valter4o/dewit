@@ -74,13 +74,14 @@ export default {
   },
 
   created() {
-    this.fetchProject({ id: this.id }).then(() => {
-      this.fetchGroups({ ids: this.ids }).then(() => {
-        setTimeout(() => {
-          this.asyncDataStatus_fetched()
-        }, 1000)
-      })
+    const request = this.fetchProject({ id: this.id }).then(() => {
+      this.fetchGroups({ ids: this.ids })
     })
+    setTimeout(() => {
+      request.then(() => {
+        this.asyncDataStatus_fetched()
+      })
+    }, 1000)
   },
 }
 </script>

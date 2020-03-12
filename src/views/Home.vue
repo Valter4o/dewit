@@ -100,11 +100,12 @@ export default {
   },
 
   created() {
-    this.fetchProjects({ ids: this.projectsIds }).then(() => {
-      setTimeout(() => {
+    const request = this.fetchProjects({ ids: this.projectsIds })
+    setTimeout(() => {
+      request.then(() => {
         this.asyncDataStatus_fetched()
-      }, 1000)
-    })
+      })
+    }, 1000)
   },
 }
 </script>

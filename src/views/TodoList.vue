@@ -113,11 +113,12 @@ export default {
   },
 
   created() {
-    this.fetchGroup({ id: this.id }).then(() => {
-      setTimeout(() => {
+    const request = this.fetchGroup({ id: this.id })
+    setTimeout(() => {
+      request.then(() => {
         this.asyncDataStatus_fetched()
-      }, 1000)
-    })
+      })
+    }, 1000)
   },
 }
 </script>
