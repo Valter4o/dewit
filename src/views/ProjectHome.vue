@@ -46,9 +46,9 @@
         </v-card>
       </template>
     </div>
-    <div v-else="">
+    <div v-else>
       <v-skeleton-loader
-        :loading="loading"
+        :loading="!asyncDataStatus_ready"
         :transition="transition"
         type="card-heading"
         width="700"
@@ -56,7 +56,7 @@
       >
       </v-skeleton-loader>
       <v-skeleton-loader
-        :loading="loading"
+        :loading="!asyncDataStatus_ready"
         :transition="transition"
         type="article"
         width="700"
@@ -64,7 +64,7 @@
       >
       </v-skeleton-loader>
       <v-skeleton-loader
-        :loading="loading"
+        :loading="!asyncDataStatus_ready"
         :transition="transition"
         height="500"
         type="actions"
@@ -84,22 +84,7 @@ export default {
   data() {
     return {
       rounded: true,
-      loading: true,
       transition: 'scale-transition',
-      transitions: [
-        {
-          text: 'None',
-          value: undefined,
-        },
-        {
-          text: 'Fade Transition',
-          value: 'fade-transition',
-        },
-        {
-          text: 'Scale Transition',
-          value: 'scale-transition',
-        },
-      ],
     }
   },
 
@@ -124,7 +109,9 @@ export default {
 
   created() {
     this.fetchProject({ id: this.id }).then(() => {
-      this.asyncDataStatus_fetched()
+      setTimeout(() => {
+        this.asyncDataStatus_fetched()
+      }, 1000)
     })
   },
 }
