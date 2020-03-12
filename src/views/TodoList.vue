@@ -66,6 +66,7 @@ import { mapActions } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 import Check from 'vue-material-design-icons/Check'
 import DeathStar from 'vue-material-design-icons/DeathStar'
+require('howler')
 
 export default {
   name: 'TodoList',
@@ -101,14 +102,26 @@ export default {
   mixins: [asyncDataStatus],
 
   methods: {
+    playSound() {
+      var sound = new Howl({
+        autoplay: true,
+        src: [require('../assets/sounds/Do it.mp3')],
+        volume: 0.5,
+      })
+      sound.play()
+    },
+
     checkTodo(todo) {
       todo.marked = !todo.marked
       this.updateTodo({ todos: this.todos, groupId: this.id })
     },
+
     deleteTodo(todo) {
+      this.playSound()
       const todos = this.todos.filter((td) => td !== todo)
       this.updateTodo({ todos, groupId: this.id })
     },
+
     ...mapActions('todoGroups', ['fetchGroup', 'updateTodo']),
   },
 

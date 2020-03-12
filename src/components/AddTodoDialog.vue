@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="500px">
+  <v-dialog v-model="dialog" overlay-opacity="0" hide-overlay max-width="500px">
     <v-text-field
       v-model="newTodoValue"
       class="todoInput"
@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       dialog: true,
+      dark: true,
       placeholder: 'Add todo',
       newTodoValue: '',
       clearable: true,
