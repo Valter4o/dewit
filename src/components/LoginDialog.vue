@@ -47,6 +47,7 @@
 
 <script>
 import LoginVariant from 'vue-material-design-icons/LoginVariant'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -62,8 +63,15 @@ export default {
   }),
 
   methods: {
-    login() {},
+    login() {
+      const { email, password } = this.form
+      this.signInWithEmailAndPassword({ email, password }).then((user) => {
+        this.dialog = false
+        this.$forceUpdate()
+      })
+    },
     authWithGoogle() {},
+    ...mapActions('auth', ['signInWithEmailAndPassword', 'fetchAuthUser']),
   },
 }
 </script>
