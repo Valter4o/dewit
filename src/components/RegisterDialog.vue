@@ -68,6 +68,7 @@
 
 <script>
 import AccountPlus from 'vue-material-design-icons/AccountPlus'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -89,13 +90,13 @@ export default {
           'Username must be more than 5 characters',
       ],
       emailRules: [
-        () => !!this.form.eamil || 'E-mail is required',
+        () => !!this.form.email || 'E-mail is required',
         () => /.+@.+/.test(this.form.email) || 'E-mail must be valid',
       ],
       passwordRules: [
         () => !!this.form.password || 'Password is required',
         () =>
-          this.form.password.length <= 5 ||
+          this.form.password.length >= 5 ||
           'Password must be more than 5 characters',
       ],
       rePasswordRules: [
@@ -108,9 +109,16 @@ export default {
 
   methods: {
     register() {
-      console.log()
+      this.registerUserWithEmailAndPassword({
+        username: this.form.username,
+        email: this.form.email,
+        password: this.form.password,
+      }).then(() => {
+        this.dialog = false
+      })
     },
     authWithGoogle() {},
+    ...mapActions('auth', ['registerUserWithEmailAndPassword']),
   },
 }
 </script>
