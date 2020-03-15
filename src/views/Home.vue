@@ -8,27 +8,32 @@
       Welcome to the best project manager you have ever seen
     </p>
 
-    <template v-if="asyncDataStatus_ready">
-      <v-data-table
-        :headers="headers"
-        :items="projects"
-        :hide-default-footer="true"
-        @click:row="redirectProject"
-      >
-      </v-data-table>
+    <template v-if="loggedIn">
+      <template v-if="asyncDataStatus_ready">
+        <v-data-table
+          :headers="headers"
+          :items="projects"
+          :hide-default-footer="true"
+          @click:row="redirectProject"
+        >
+        </v-data-table>
+      </template>
+      <template v-else>
+        <v-progress-linear
+          indeterminate
+          color="yellow darken-2"
+        ></v-progress-linear>
+      </template>
     </template>
     <template v-else>
-      <v-progress-linear
-        indeterminate
-        color="yellow darken-2"
-      ></v-progress-linear>
+      <h3>Loggin or Register to see your projects</h3>
     </template>
   </div>
 </template>
 
 <script>
 import firebase from 'firebase'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
@@ -85,6 +90,9 @@ export default {
       )
       return displayProjects
     },
+    loggedIn() {
+      return this.authUser()
+    },
   },
 
   methods: {
@@ -96,16 +104,25 @@ export default {
         },
       })
     },
+    getProjects() {
+      if (this.loggedIn) {
+        const request = this.fetchProjects({ ids: this.projectsIds })
+        setTimeout(() => {
+          request.then(() => {
+            this.asyncDataStatus_fetched()
+          })
+        }, 1000)
+      }
+    },
     ...mapActions('projects', ['fetchProjects']),
+    ...mapGetters('auth', ['authUser']),
   },
 
   created() {
-    const request = this.fetchProjects({ ids: this.projectsIds })
-    setTimeout(() => {
-      request.then(() => {
-        this.asyncDataStatus_fetched()
-      })
-    }, 1000)
+    this.getProjects()
+  },
+  updated() {
+    this.getProjects()
   },
 }
 </script>
