@@ -19,7 +19,7 @@
       <Register />
     </div>
 
-    <div class="text-center" v-if="loggedIn">
+    <div class="text-center" v-else>
       <v-btn rounded color="primary" dark @click="logout">Logout</v-btn>
     </div>
   </v-app-bar>
@@ -28,22 +28,27 @@
 <script>
 import Login from '@/components/LoginDialog'
 import Register from '@/components/RegisterDialog'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
     Login,
     Register,
   },
-  data() {
-    return {
-      loggedIn: false,
-    }
+  computed: {
+    loggedIn() {
+      return this.authUser()
+    },
   },
   methods: {
     showHideSidebar() {
       this.$emit('changeSideBar')
     },
-    logout() {},
+    logout() {
+      this.signOut()
+    },
+    ...mapActions('auth', ['signOut']),
+    ...mapGetters('auth', ['authUser']),
   },
 }
 </script>
