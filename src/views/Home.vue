@@ -58,22 +58,28 @@ export default {
           value: 'status',
         },
       ],
-
-      projectsIds: ['I0vvw9J5qf2iE6TLm4tE'],
-      key: 'z2LIjPKBL1iDKMal7g1c',
     }
   },
 
   mixins: [asyncDataStatus],
 
   computed: {
+    userId() {
+      if (this.loggedIn) {
+        return this.authUser()._key
+      }
+    },
+    projectIds() {
+      if (this.loggedIn) {
+        return this.authUser().projects.map((project) => project.id)
+      }
+    },
     projects() {
       const displayProjects = []
       const projects = Object.entries(this.$store.state.projects.items).forEach(
         ([id, { name, users }]) => {
           const { role, status } = users.find(
-            (user) => user._key === this.key
-            //Todo: Replace with authenticated user id
+            (user) => user._key === this.userId
           )
 
           if (role && status) {
@@ -106,7 +112,7 @@ export default {
     },
     getProjects() {
       if (this.loggedIn) {
-        const request = this.fetchProjects({ ids: this.projectsIds })
+        const request = this.fetchProjects({ ids: this.projectIds })
         setTimeout(() => {
           request.then(() => {
             this.asyncDataStatus_fetched()
@@ -119,6 +125,7 @@ export default {
   },
 
   created() {
+    this.userId
     this.getProjects()
   },
   updated() {
