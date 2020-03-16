@@ -20,6 +20,10 @@
     </div>
 
     <div class="text-center" v-else>
+      <span
+        >Welcome
+        <v-btn color="blue">{{ username }}</v-btn>
+      </span>
       <v-btn rounded color="primary" dark @click="logout">Logout</v-btn>
     </div>
   </v-app-bar>
@@ -38,6 +42,9 @@ export default {
   computed: {
     loggedIn() {
       return this.authUser()
+    },
+    username() {
+      return this.authUser().username
     },
   },
   methods: {
