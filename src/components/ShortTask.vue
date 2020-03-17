@@ -14,28 +14,34 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-card-actions>
+      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
+      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
+      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
+      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
+      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
+      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
+      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
+      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
+      <v-footer>
         <CommentTextMultiple />
         <span :class="$style.commentsCount">5</span>
-        <v-spacer></v-spacer>
-        <v-list-item>
-          <v-btn small rounded @click="bar">Demo tag</v-btn>
-          <v-btn small rounded @click="bar">Demo tag</v-btn>
-          <v-btn small rounded @click="bar">Demo tag</v-btn>
-        </v-list-item>
-      </v-card-actions>
+        <DnsOutline />
+        <span :class="$style.commentsCount">5</span>
+      </v-footer>
     </v-card>
-    <LongDialog :dialog="dialog" />
+    <LongDialog :dialogProp="dialog" @close="close" />
   </div>
 </template>
 
 <script>
 import CommentTextMultiple from 'vue-material-design-icons/CommentTextMultiple'
+import DnsOutline from 'vue-material-design-icons/DnsOutline'
 import LongDialog from '@/components/LongTaskDialog'
 
 export default {
   components: {
     CommentTextMultiple,
+    DnsOutline,
     LongDialog,
   },
 
@@ -59,6 +65,9 @@ export default {
     bar(e) {
       e.cancelBubble = true
     },
+    close() {
+      this.dialog = false
+    },
   },
 }
 </script>
@@ -67,5 +76,9 @@ export default {
 .headerTask,
 .commentsCount {
   margin-left: 10px;
+  margin-right: 10px;
+}
+.tag {
+  margin: 5px;
 }
 </style>
