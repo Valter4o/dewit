@@ -11,42 +11,25 @@
               {{ project.description }}
             </p>
           </v-card-text>
-          <v-card-actions :class="$style.buttonsContainer">
-            <router-link :to="{ name: 'UsersList' }">
-              <v-btn
-                text
-                rounded="rounded"
-                max-width="200px"
-                color="deep-purple"
-              >
-                <AccountDetails />
-                Users List
-              </v-btn>
-            </router-link>
-            <router-link :to="{ name: 'TodoGroups', params: { id } }">
-              <v-btn
-                text
-                rounded="rounded"
-                max-width="200px"
-                color="deep-purple"
-              >
-                <CheckBoxMultipleOutline />
-                Todo List
-              </v-btn>
-            </router-link>
-            <router-link :to="{ name: 'Tasker' }">
-              <v-btn
-                text
-                rounded="rounded"
-                max-width="200px"
-                color="deep-purple"
-              >
-                <InboxFull />
+          <router-link :to="{ name: 'UsersList' }">
+            <v-btn text rounded="rounded" max-width="200px" color="deep-purple">
+              <AccountDetails />
+              Users List
+            </v-btn>
+          </router-link>
+          <router-link :to="{ name: 'TodoGroups', params: { id } }">
+            <v-btn text rounded="rounded" max-width="200px" color="deep-purple">
+              <CheckBoxMultipleOutline />
+              Todo List
+            </v-btn>
+          </router-link>
+          <router-link :to="{ name: 'Tasker' }">
+            <v-btn text rounded="rounded" max-width="200px" color="deep-purple">
+              <InboxFull />
 
-                Tasker
-              </v-btn>
-            </router-link>
-          </v-card-actions>
+              Tasker
+            </v-btn>
+          </router-link>
         </v-card>
       </template>
     </div>
@@ -116,6 +99,7 @@ export default {
   mixins: [asyncDataStatus],
 
   methods: {
+    redirect() {},
     ...mapActions('projects', ['fetchProject']),
   },
 
