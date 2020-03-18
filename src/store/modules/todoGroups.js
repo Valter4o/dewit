@@ -35,5 +35,15 @@ export default {
                 .doc(groupId)
                 .update({ todos })
         },
+        createTodoGroup() {
+            return new Promise((resolve, reject) => {
+                firebase.firestore()
+                    .collection('todoGroups')
+                    .add({})
+                    .then((docRef) => {
+                        resolve(docRef.id);
+                    })
+            })
+        }
     }
 }
