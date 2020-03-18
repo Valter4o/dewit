@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import checkForLongerPath from './utils'
 
 export default {
     fetchItem({ commit, state }, { id, resource }) {
@@ -8,6 +9,7 @@ export default {
                 .collection(resource)
                 .doc(id)
                 .onSnapshot((snap) => {
+                    resource = checkForLongerPath(resource);
                     commit('setItem', { item: snap.data(), id, resource })
                     resolve(state[resource].items[id]);
                 })
