@@ -17,9 +17,9 @@ export default new Vuex.Store({
   modules: {
     projects,
     todoGroups,
-    tasker,
     auth,
-    user
+    user,
+    tasker
   },
 
   getters: {
