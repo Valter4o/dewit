@@ -104,7 +104,7 @@ export default {
   methods: {
     redirectProject(project) {
       this.$router.push({
-        name: 'ProjectHome',
+        name: 'Tasker',
         params: {
           id: project.id,
         },
@@ -122,11 +122,13 @@ export default {
     },
     ...mapActions('projects', ['fetchProjects']),
     ...mapGetters('auth', ['authUser']),
+    ...mapActions('tasker', ['fetchTasks']),
   },
 
   created() {
     this.userId
     this.getProjects()
+    this.fetchTasks()
   },
   updated() {
     this.getProjects()
