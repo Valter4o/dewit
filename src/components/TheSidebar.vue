@@ -1,13 +1,9 @@
 <template>
   <div>
-    <v-navigation-drawer
-      app
-      clipped
-    />
+    <v-navigation-drawer app clipped />
   </div>
 </template>
 
 <script>
-export default {
-}
+export default {}
 </script>
