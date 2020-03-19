@@ -7,6 +7,7 @@ import todoGroups from './modules/todoGroups'
 import tasker from './modules/tasker'
 import auth from './modules/auth'
 import user from './modules/user'
+import tags from './modules/tags'
 
 Vue.use(Vuex)
 
@@ -19,7 +20,8 @@ export default new Vuex.Store({
     todoGroups,
     auth,
     user,
-    tasker
+    tasker,
+    tags
   },
 
   getters: {
