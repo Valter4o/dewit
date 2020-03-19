@@ -6,7 +6,7 @@
           Create Task
         </h3>
         <v-spacer />
-        <v-btn fab small :class="$style.closeBtn">
+        <v-btn fab small :class="$style.closeBtn" @click="close">
           x
         </v-btn>
       </v-row>
@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     close() {
-      this.$emit('close')
+      this.$emit('closeDialog')
     },
 
     submit() {
@@ -59,6 +59,8 @@ export default {
         const projectId = this.$router.currentRoute.params.id
 
         this.createTask({ projectId, task }).then(() => {
+          this.title = ''
+          this.description = ''
           this.close()
         })
       })
