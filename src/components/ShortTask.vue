@@ -1,35 +1,45 @@
 <template>
   <div>
-    <v-card class="mx-auto" max-width="360" outlined @click="displayDialog">
+    <v-card
+      class="mx-auto"
+      max-width="360"
+      min-width="360"
+      outlined
+      elevation="5"
+      @click="displayDialog"
+    >
       <v-list-item three-line>
         <v-list-item-content>
-          <h3 :class="$style.headerTask">Pesho dava sledniq task</h3>
+          <h3 :class="$style.headerTask">{{ task.title }}</h3>
           <br />
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            {{ task.description }}
           </p>
         </v-list-item-content>
       </v-list-item>
 
-      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
-      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
-      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
-      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
-      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
-      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
-      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
-      <v-btn :class="$style.tag" small rounded @click="bar">Demo tag</v-btn>
-      <v-footer>
-        <CommentTextMultiple />
-        <span :class="$style.commentsCount">5</span>
-        <DnsOutline />
-        <span :class="$style.commentsCount">5</span>
+      <v-btn
+        :class="$style.tag"
+        small
+        rounded
+        v-for="tag in task.tags"
+        :color="tag.color"
+        :key="tag._key"
+        >{{ tag.value }}</v-btn
+      >
+      <v-footer color="white">
+        <template v-if="commentsCount > 0">
+          <CommentTextMultiple />
+          <span :class="$style.commentsCount">{{ commentsCount }}</span>
+        </template>
+        <!-- 
+        <template>
+          <DnsOutline />
+          <span :class="$style.commentsCount">5</span>
+        </template> -->
       </v-footer>
     </v-card>
-    <LongDialog :dialogProp="dialog" @close="close" />
+    <LongDialog :dialogProp="dialog" @close="close" :task="task" />
   </div>
 </template>
 
@@ -52,9 +62,15 @@ export default {
   },
 
   props: {
-    type: {
-      type: String,
+    task: {
+      type: Object,
       required: true,
+    },
+  },
+
+  computed: {
+    commentsCount() {
+      return this.task.comments.length
     },
   },
 
@@ -62,11 +78,8 @@ export default {
     displayDialog() {
       this.dialog = true
     },
-    bar(e) {
-      e.cancelBubble = true
-    },
     close() {
-      this.dialog = false
+      this.dialog = !this.dialog
     },
   },
 }
