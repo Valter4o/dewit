@@ -36,7 +36,7 @@
         >
           <v-icon dark>mdi-plus</v-icon>
         </v-btn>
-        <CreateTask :dialog="createTaskDialog" :close="changeDialog" />
+        <CreateTask :dialog="createTaskDialog" @closeDialog="changeDialog" />
       </v-app-bar>
       <br />
       <template v-if="tasks">
