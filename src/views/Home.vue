@@ -122,13 +122,11 @@ export default {
     },
     ...mapActions('projects', ['fetchProjects']),
     ...mapGetters('auth', ['authUser']),
-    ...mapActions('tasker', ['fetchTasks']),
   },
 
   created() {
     this.userId
     this.getProjects()
-    this.fetchTasks()
   },
   updated() {
     this.getProjects()
