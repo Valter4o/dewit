@@ -41,6 +41,14 @@ export default {
                         resolve();
                     })
             })
+        },
+        updateTask(_, { task, projectId }) {
+            firebase.firestore()
+                .collection('tasker')
+                .doc(projectId)
+                .collection('tasks')
+                .doc(task['_key'])
+                .update(task)
         }
     }
-}
+} 
