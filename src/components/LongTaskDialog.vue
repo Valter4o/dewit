@@ -54,6 +54,16 @@
                 >Complete</v-list-item-title
               >
             </v-list-item>
+
+            <v-list-item @click="changeEditable">
+              <v-btn fab small color="blue">
+                <SquareEditOutline />
+              </v-btn>
+
+              <v-list-item-title :class="$style.menuTitle"
+                >Edit</v-list-item-title
+              >
+            </v-list-item>
           </v-list>
         </v-menu>
 
@@ -66,14 +76,24 @@
 
       <v-row>
         <v-col :class="$style.leftCol">
-          <h3>Pesho dava sledniq task</h3>
-          <br />
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </p>
+          <template v-if="edit">
+            <v-text-field v-model="task.title" flat> </v-text-field>
+
+            <br />
+            <v-text-field v-model="task.description" flat dense> </v-text-field>
+            <v-btn rounded color="red" @click="changeEditable">
+              Cancel
+            </v-btn>
+            <v-btn rounded color="green" @click="editTask"> Submit </v-btn>
+          </template>
+
+          <template v-else>
+            <h3>{{ task.title }}</h3>
+            <br />
+            <p>
+              {{ task.description }}
+            </p>
+          </template>
 
           <v-btn rounded color="blue" @click="redirectToTodoList">
             Go to the todolist for this task
@@ -85,23 +105,20 @@
               outlined
               class="mx-auto"
               max-width="344"
-              v-for="i in 40"
-              :key="i"
+              v-for="comment in task.comments"
+              :key="comment.author"
             >
               <v-list-item three-line>
                 <v-list-item-content>
                   <v-list-item-title>
                     <v-avatar color="indigo" size="35">
-                      <img
-                        src="https://cdn.vuetifyjs.com/images/john.jpg"
-                        alt="John"
-                      />
+                      <img :src="comment.avatarUrl" :alt="comment.name" />
                     </v-avatar>
-                    Headline 5</v-list-item-title
+                    {{ comment.name }}</v-list-item-title
                   >
                   <v-list-item-subtitle>
                     <h4>
-                      Greyhound divisely hello coldly fonwderfully
+                      {{ comment.text }}
                     </h4>
                   </v-list-item-subtitle>
                 </v-list-item-content>
@@ -116,19 +133,21 @@
               <h3>Tags</h3>
               <v-spacer />
               <v-btn rounded @click="changeTagsShow">+</v-btn>
-              <Tags :tagsDialogProp="tagDialog" @closeTags="changeTagsShow" />
+              <Tags
+                :tagsDialogProp="tagDialog"
+                @closeTags="changeTagsShow"
+                @addTag="addTag"
+              />
             </v-app-bar>
-            <v-btn :class="$style.tag" small rounded>Demo tag</v-btn>
-            <v-btn :class="$style.tag" small rounded>Demo tag</v-btn>
-            <v-btn :class="$style.tag" small rounded>Demo tag</v-btn>
-            <v-btn :class="$style.tag" small rounded>Demo tag</v-btn>
-            <v-btn :class="$style.tag" small rounded>Demo tag</v-btn>
-            <v-btn :class="$style.tag" small rounded>Demo tag</v-btn>
-            <v-btn :class="$style.tag" small rounded>Demo tag</v-btn>
-            <v-btn :class="$style.tag" small rounded>Demo tag</v-btn>
-            <v-btn :class="$style.tag" small rounded>Demo tag</v-btn>
-            <v-btn :class="$style.tag" small rounded>Demo tag</v-btn>
-            <v-btn :class="$style.tag" small rounded>Demo tag</v-btn>
+            <v-btn
+              :class="$style.tag"
+              small
+              rounded
+              v-for="tag in task.tags"
+              :color="tag.color"
+              :key="task.tags.indexOf(tag)"
+              >{{ tag.value }}</v-btn
+            >
           </div>
           <br />
 
@@ -150,6 +169,8 @@ import ViewComfy from 'vue-material-design-icons/ViewComfy'
 import AccountArrowRight from 'vue-material-design-icons/AccountArrowRight'
 import DeleteForever from 'vue-material-design-icons/DeleteForever'
 import ShieldCheck from 'vue-material-design-icons/ShieldCheck'
+import SquareEditOutline from 'vue-material-design-icons/SquareEditOutline'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -158,10 +179,15 @@ export default {
     DeleteForever,
     ShieldCheck,
     Tags,
+    SquareEditOutline,
   },
   props: {
     dialogProp: {
       type: Boolean,
+      required: true,
+    },
+    task: {
+      type: Object,
       required: true,
     },
   },
@@ -170,6 +196,7 @@ export default {
     return {
       tagDialog: false,
       newComment: '',
+      edit: true,
     }
   },
   computed: {
@@ -182,7 +209,26 @@ export default {
     close() {
       this.$emit('close')
     },
+    addTag(tag) {
+      const task = this.task
+      task.tags.push(tag)
 
+      const projectId = this.$router.currentRoute.params.id
+
+      this.updateTask({ task, projectId })
+
+      this.changeTagsShow()
+    },
+
+    changeEditable() {
+      this.edit = !this.edit
+    },
+
+    editTask() {
+      const projectId = this.$router.currentRoute.params.id
+      this.updateTask({ task: this.task, projectId })
+      this.edit = false
+    },
     asign() {
       //Todo
       console.log('asign')
@@ -196,12 +242,13 @@ export default {
       console.log('complete')
     },
     redirectToTodoList() {
-      console.log('hi')
+      //Todo
     },
 
     changeTagsShow() {
       this.tagDialog = !this.tagDialog
     },
+    ...mapActions('tasker', ['updateTask']),
   },
 }
 </script>
