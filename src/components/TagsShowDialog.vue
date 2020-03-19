@@ -13,25 +13,26 @@
           +
         </v-btn>
 
-        <Create :createDialogProp="createDialog" @close="changeCreateShow" />
+        <Create
+          :createDialogProp="createDialog"
+          @close="changeCreateShow"
+          @create="create"
+        />
         <v-spacer />
 
         <v-btn rounded @click="close" :class="$style.closeBtn">
           Close
         </v-btn>
       </v-row>
-      <v-container>
-        <v-chip>Demo tag</v-chip>
-        <v-chip>Demo tag</v-chip>
-        <v-chip>Demo tag</v-chip>
-        <v-chip>Demo tag</v-chip>
-        <v-chip>Demo tag</v-chip>
-        <v-chip>Demo tag</v-chip>
-        <v-chip>Demo tag</v-chip>
-        <v-chip>Demo tag</v-chip>
-        <v-chip>Demo tag</v-chip>
-        <v-chip>Demo tag</v-chip>
-        <v-chip>Demo tag</v-chip>
+      <v-container v-if="asyncDataStatus_ready">
+        <v-btn
+          rounded
+          @click="addToTask(tag)"
+          v-for="tag in tags"
+          :key="tags.indexOf(tag)"
+          :color="tag.color"
+          >{{ tag.value }}</v-btn
+        >
       </v-container>
     </v-card>
   </v-dialog>
@@ -39,11 +40,15 @@
 
 <script>
 import Create from '@/components/TagCreateDialog'
+import { mapActions } from 'vuex'
+import asyncDataStatus from '../mixins/asyncDataStatus'
 
 export default {
   components: {
     Create,
   },
+
+  mixins: [asyncDataStatus],
 
   props: {
     tagsDialogProp: {
@@ -62,6 +67,12 @@ export default {
     dialog() {
       return this.tagsDialogProp
     },
+    projectId() {
+      return this.$router.currentRoute.params.id
+    },
+    tags() {
+      return this.$store.state.tags.items[this.projectId].tags
+    },
   },
 
   methods: {
@@ -71,6 +82,22 @@ export default {
     changeCreateShow() {
       this.createDialog = !this.createDialog
     },
+    create({ value, color }) {
+      this.changeCreateShow()
+      const tags = this.tags
+      tags.push({ value, color })
+      this.updateTags({ tags, id: this.projectId })
+    },
+    addToTask(tag) {
+      this.$emit('addTag', tag)
+    },
+    ...mapActions('tags', ['fetchTags', 'updateTags']),
+  },
+
+  created() {
+    this.fetchTags({ projectId: this.projectId }).then(() => {
+      this.asyncDataStatus_fetched()
+    })
   },
 }
 </script>
