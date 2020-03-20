@@ -13,6 +13,9 @@
             {{ comment.text }}
           </h4>
         </v-list-item-subtitle>
+        <h6>
+          {{ comment.commentTime | moment('dddd, MMMM Do YYYY, h:mm:ss a') }}
+        </h6>
       </v-list-item-content>
     </v-list-item>
   </div>
