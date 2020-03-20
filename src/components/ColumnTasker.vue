@@ -18,7 +18,7 @@
           </v-btn>
         </template>
         <template v-else-if="status === 'Done'">
-          <v-btn fab>
+          <v-btn fab small>
             <Check />
           </v-btn>
         </template>
