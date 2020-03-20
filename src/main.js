@@ -27,6 +27,7 @@ firebase.auth().onAuthStateChanged(user => {
     store.dispatch('auth/fetchAuthUser');
   }
 })
+Vue.use(require('vue-moment'));
 
 new Vue({
   router,
