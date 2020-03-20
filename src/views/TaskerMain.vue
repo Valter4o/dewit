@@ -7,7 +7,27 @@
       <Column status="Done" color="green" />
     </v-row>
     <div v-else>
-      Loading
+      <v-row>
+        <v-col v-for="i in 4" :key="i">
+          <v-skeleton-loader
+            :loading="!asyncDataStatus_ready"
+            :transition="transition"
+            type="card"
+            width="360"
+            height="60"
+            class="mx-auto"
+          >
+          </v-skeleton-loader>
+          <v-col>
+            <v-skeleton-loader
+              v-for="j in 3"
+              :key="j"
+              class="mb-6"
+              type="article, actions"
+            ></v-skeleton-loader>
+          </v-col>
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>
@@ -27,14 +47,22 @@ export default {
       requiredL: true,
     },
   },
+  data() {
+    return {
+      transition: 'scale-transition',
+    }
+  },
 
   mixins: [asyncDataStatus],
 
   methods: {
     fetchTasksMethod() {
-      this.fetchTasks({ projectId: this.id }).then((data) => {
-        this.asyncDataStatus_fetched()
-      })
+      const request = this.fetchTasks({ projectId: this.id })
+      setTimeout(() => {
+        request.then((data) => {
+          this.asyncDataStatus_fetched()
+        })
+      }, 1000)
     },
     ...mapActions('tasker', ['fetchTasks']),
     ...mapActions('projects', ['fetchProject']),
