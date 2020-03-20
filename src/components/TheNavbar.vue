@@ -52,7 +52,9 @@ export default {
       this.$emit('changeSideBar')
     },
     logout() {
-      this.signOut()
+      this.signOut().then(() => {
+        this.$router.push({ name: 'Home' })
+      })
     },
     ...mapActions('auth', ['signOut']),
     ...mapGetters('auth', ['authUser']),
