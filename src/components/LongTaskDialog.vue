@@ -108,21 +108,7 @@
               v-for="comment in task.comments"
               :key="comment.author"
             >
-              <v-list-item three-line>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    <v-avatar color="indigo" size="35">
-                      <img :src="comment.avatarUrl" :alt="comment.name" />
-                    </v-avatar>
-                    {{ comment.name }}</v-list-item-title
-                  >
-                  <v-list-item-subtitle>
-                    <h4>
-                      {{ comment.text }}
-                    </h4>
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
+              <Comment :comment="comment" />
             </v-card>
           </div>
         </v-col>
@@ -156,6 +142,9 @@
             <br />
             <v-textarea outlined v-model="newComment" label="Add Comment">
             </v-textarea>
+            <v-btn rounded color="red" @click="addComment">
+              Comment
+            </v-btn>
           </div>
         </v-col>
       </v-row>
@@ -165,12 +154,13 @@
 
 <script>
 import Tags from '@/components/TagsShowDialog'
+import Comment from '@/components/TaskComment'
 import ViewComfy from 'vue-material-design-icons/ViewComfy'
 import AccountArrowRight from 'vue-material-design-icons/AccountArrowRight'
 import DeleteForever from 'vue-material-design-icons/DeleteForever'
 import ShieldCheck from 'vue-material-design-icons/ShieldCheck'
 import SquareEditOutline from 'vue-material-design-icons/SquareEditOutline'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -180,6 +170,7 @@ export default {
     ShieldCheck,
     Tags,
     SquareEditOutline,
+    Comment,
   },
   props: {
     dialogProp: {
@@ -196,12 +187,15 @@ export default {
     return {
       tagDialog: false,
       newComment: '',
-      edit: true,
+      edit: false,
     }
   },
   computed: {
     dialog() {
       return this.dialogProp
+    },
+    user() {
+      return this.authUser
     },
   },
 
@@ -229,6 +223,21 @@ export default {
       this.updateTask({ task: this.task, projectId })
       this.edit = false
     },
+    addComment() {
+      if (this.newComment) {
+        const projectId = this.$router.currentRoute.params.id
+        const newComment = {
+          avatarUrl: this.user.avatarUrl ? this.user.avatarUrl : null,
+          author: this.user._key ? this.user._key : null,
+          text: this.newComment,
+          name: this.user.username ? this.user.username : null,
+          commentTime: Date.now(),
+        }
+        this.task.comments.unshift(newComment)
+        this.updateTask({ task: this.task, projectId })
+        this.newComment = ''
+      }
+    },
     asign() {
       //Todo
       console.log('asign')
@@ -249,6 +258,7 @@ export default {
       this.tagDialog = !this.tagDialog
     },
     ...mapActions('tasker', ['updateTask']),
+    ...mapGetters('auth', ['authUser']),
   },
 }
 </script>
