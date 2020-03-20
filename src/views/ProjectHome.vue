@@ -11,18 +11,6 @@
               {{ project.description }}
             </p>
           </v-card-text>
-          <router-link :to="{ name: 'UsersList' }">
-            <v-btn text rounded="rounded" max-width="200px" color="deep-purple">
-              <AccountDetails />
-              Users List
-            </v-btn>
-          </router-link>
-          <router-link :to="{ name: 'TodoGroups', params: { id } }">
-            <v-btn text rounded="rounded" max-width="200px" color="deep-purple">
-              <CheckBoxMultipleOutline />
-              Todo List
-            </v-btn>
-          </router-link>
           <router-link :to="{ name: 'Tasker' }">
             <v-btn text rounded="rounded" max-width="200px" color="deep-purple">
               <InboxFull />
