@@ -195,7 +195,7 @@ export default {
       return this.dialogProp
     },
     user() {
-      return this.authUser
+      return this.authUser()
     },
   },
 
@@ -223,14 +223,17 @@ export default {
       this.updateTask({ task: this.task, projectId })
       this.edit = false
     },
+
     addComment() {
       if (this.newComment) {
+        const name = this.user.username ? this.user.username : this.user.email
+        const avatarUrl = this.user.avatarUrl ? this.user.avatarUrl : ''
+
         const projectId = this.$router.currentRoute.params.id
         const newComment = {
-          avatarUrl: this.user.avatarUrl ? this.user.avatarUrl : null,
-          author: this.user._key ? this.user._key : null,
+          avatarUrl,
           text: this.newComment,
-          name: this.user.username ? this.user.username : null,
+          name,
           commentTime: Date.now(),
         }
         this.task.comments.unshift(newComment)
@@ -238,6 +241,7 @@ export default {
         this.newComment = ''
       }
     },
+
     asign() {
       //Todo
       console.log('asign')
