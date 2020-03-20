@@ -1,16 +1,18 @@
 <template>
-  <v-dialog v-model="dialog" overlay-opacity="0" hide-overlay max-width="500px">
-    <v-text-field
-      v-model="newTodoValue"
-      class="todoInput"
-      :placeholder="placeholder"
-      :clearable="clearable"
-      @keyup.13="submit"
-    />
-
-    <button @click="submit()">
-      Submit
-    </button>
+  <v-dialog v-model="dialog" overlay-opacity="0" hide-overlay max-width="300px">
+    <v-card>
+      <v-text-field
+        v-model="newTodoValue"
+        class="todoInput"
+        :placeholder="placeholder"
+        :clearable="clearable"
+        @keyup.13="submit"
+      />
+      <!-- 
+      <v-btn rounded @click="submit()">
+        Submit
+      </v-btn> -->
+    </v-card>
   </v-dialog>
 </template>
 
@@ -28,11 +30,14 @@ export default {
       clearable: true,
     }
   },
+  props: {
+    groupId: {
+      type: String,
+      required: true,
+    },
+  },
 
   computed: {
-    groupId() {
-      return this.$router.app._route.params.id
-    },
     todos() {
       return this.$store.state.todoGroups.items[this.groupId].todos
     },

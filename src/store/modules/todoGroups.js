@@ -39,7 +39,11 @@ export default {
             return new Promise((resolve, reject) => {
                 firebase.firestore()
                     .collection('todoGroups')
-                    .add({})
+                    .add({
+                        todos: [
+
+                        ]
+                    })
                     .then((docRef) => {
                         resolve(docRef.id);
                     })

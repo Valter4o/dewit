@@ -2,10 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '@/views/Home';
 import ProjectHome from '@/views/ProjectHome'
-import TodoGroups from '@/views/TodoGroups'
 import UsersList from '@/views/UsersList'
 import TaskerMain from '@/views/TaskerMain'
-import TodoList from '@/views/TodoList'
 
 Vue.use(Router);
 // component: () => import(/*webpackChunkName:projectHome*/'./views/ProjectHome'),
@@ -28,12 +26,6 @@ export default new Router({
             props: true
         },
         {
-            path: '/todoGroups/:id',
-            name: 'TodoGroups',
-            component: TodoGroups,
-            props: true
-        },
-        {
             path: '/users/:id',
             name: 'UsersList',
             component: UsersList,
@@ -45,11 +37,5 @@ export default new Router({
             component: TaskerMain,
             props: true
         },
-        {
-            path: '/todoList/:id',
-            name: 'TodoList',
-            component: TodoList,
-            props: true
-        }
     ]
 })

@@ -95,8 +95,13 @@
             </p>
           </template>
 
-          <v-btn rounded color="blue" @click="redirectToTodoList">
+          <v-btn rounded color="blue" @click="changeTodoDialog">
             Go to the todolist for this task
+            <TodoList
+              :mainDialog="todoDialog"
+              :id="task.todoGroup"
+              @closeTodoList="closeTodoList"
+            />
           </v-btn>
           <br />
           <div>
@@ -132,6 +137,7 @@
               v-for="tag in task.tags"
               :color="tag.color"
               :key="task.tags.indexOf(tag)"
+              @click="removeTag(tag)"
               >{{ tag.value }}</v-btn
             >
           </div>
@@ -160,6 +166,7 @@ import AccountArrowRight from 'vue-material-design-icons/AccountArrowRight'
 import DeleteForever from 'vue-material-design-icons/DeleteForever'
 import ShieldCheck from 'vue-material-design-icons/ShieldCheck'
 import SquareEditOutline from 'vue-material-design-icons/SquareEditOutline'
+import TodoList from '@/components/TodoList'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -171,6 +178,7 @@ export default {
     Tags,
     SquareEditOutline,
     Comment,
+    TodoList,
   },
   props: {
     dialogProp: {
@@ -188,6 +196,7 @@ export default {
       tagDialog: false,
       newComment: '',
       edit: false,
+      todoDialog: false,
     }
   },
   computed: {
@@ -203,15 +212,26 @@ export default {
     close() {
       this.$emit('close')
     },
+    closeTodoList() {
+      this.todoDialog = !this.todoDialog
+    },
     addTag(tag) {
       const task = this.task
-      task.tags.push(tag)
 
+      if (!task.tags.find((t) => t.value === tag.value)) {
+        task.tags.push(tag)
+
+        const projectId = this.$router.currentRoute.params.id
+
+        this.updateTask({ task, projectId })
+      }
+    },
+
+    removeTag(tag) {
       const projectId = this.$router.currentRoute.params.id
 
-      this.updateTask({ task, projectId })
-
-      this.changeTagsShow()
+      this.task.tags.splice(this.task.tags.indexOf(tag), 1)
+      this.updateTask({ task: this.task, projectId })
     },
 
     changeEditable() {
@@ -241,6 +261,9 @@ export default {
         this.newComment = ''
       }
     },
+    changeTodoDialog() {
+      this.todoDialog = !this.todoDialog
+    },
 
     asign() {
       //Todo
@@ -253,9 +276,6 @@ export default {
     complete() {
       //Todo
       console.log('complete')
-    },
-    redirectToTodoList() {
-      //Todo
     },
 
     changeTagsShow() {
