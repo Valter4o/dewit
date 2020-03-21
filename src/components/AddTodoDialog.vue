@@ -8,16 +8,13 @@
         :clearable="clearable"
         @keyup.13="submit"
       />
-      <!-- 
-      <v-btn rounded @click="submit()">
-        Submit
-      </v-btn> -->
     </v-card>
   </v-dialog>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import playSound from '@/utils/playSound'
 
 export default {
   name: 'AddTodoDialog',
@@ -55,6 +52,8 @@ export default {
 
         this.createTodo({ todos, groupId: this.groupId })
         this.newTodoValue = ''
+
+        playSound('Do it')
       }
     },
     ...mapActions('todoGroups', ['createTodo']),
