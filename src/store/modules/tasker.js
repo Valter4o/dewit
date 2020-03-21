@@ -7,7 +7,7 @@ export default {
     },
 
     getters: {
-        filteredTasks: (state, getters, rootState, rootGetters) => (status) => {
+        filteredTasks: (state, getters, rootState) => (status) => {
             return Object.values(rootState.tasker.items).filter((task) => task.status === status)
         },
     },
@@ -20,7 +20,6 @@ export default {
                     .doc(projectId)
                     .collection('tasks')
                     .onSnapshot((s) => {
-
                         s.docs.map(d => {
                             const id = d.id;
                             commit('setItem', { item: d.data(), id, resource: 'tasker' }, { root: true });
@@ -49,6 +48,16 @@ export default {
                 .collection('tasks')
                 .doc(task['_key'])
                 .update(task)
-        }
+        },
+        deleteTask(_, { taskId, projectId }) {
+            firebase.firestore()
+                .collection('tasker')
+                .doc(projectId)
+                .collection('tasks')
+                .doc(taskId)
+                .delete()
+
+        },
+
     }
 } 
