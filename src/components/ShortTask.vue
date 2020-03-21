@@ -37,6 +37,23 @@
           <DnsOutline />
           <span :class="$style.commentsCount">5</span>
         </template> -->
+        <v-spacer />
+        <v-btn
+          rounded
+          color="red"
+          @click="moveLeft"
+          v-if="previousStatus[task.status]"
+        >
+          <ArrowLeftBoldOutline />
+        </v-btn>
+        <v-btn
+          rounded
+          color="red"
+          @click="moveRight"
+          v-if="nextStatus[task.status]"
+        >
+          <ArrowRightBoldOutline />
+        </v-btn>
       </v-footer>
     </v-card>
     <LongDialog :dialogProp="dialog" @close="close" :task="task" />
@@ -46,18 +63,35 @@
 <script>
 import CommentTextMultiple from 'vue-material-design-icons/CommentTextMultiple'
 import DnsOutline from 'vue-material-design-icons/DnsOutline'
+import ArrowRightBoldOutline from 'vue-material-design-icons/ArrowRightBoldOutline'
+import ArrowLeftBoldOutline from 'vue-material-design-icons/ArrowLeftBoldOutline'
 import LongDialog from '@/components/LongTaskDialog'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
     CommentTextMultiple,
     DnsOutline,
     LongDialog,
+    ArrowRightBoldOutline,
+    ArrowLeftBoldOutline,
   },
 
   data() {
     return {
       dialog: false,
+      nextStatus: {
+        Inbox: 'To do',
+        'To do': 'In Progress',
+        'In Progress': 'Done',
+        Done: '',
+      },
+      previousStatus: {
+        Inbox: '',
+        'To do': 'Inbox',
+        'In Progress': 'To do',
+        Done: 'In Progress',
+      },
     }
   },
 
@@ -75,12 +109,34 @@ export default {
   },
 
   methods: {
+    moveLeft(e) {
+      e.cancelBubble = true
+      const prev = this.previousStatus[this.task.status]
+      if (prev) {
+        this.task.status = prev
+        this.update()
+      }
+    },
+    moveRight(e) {
+      e.cancelBubble = true
+      const next = this.nextStatus[this.task.status]
+      if (next) {
+        this.task.status = next
+        this.update()
+      }
+    },
+    update() {
+      const projectId = this.$router.currentRoute.params.id
+
+      this.updateTask({ task: this.task, projectId })
+    },
     displayDialog() {
       this.dialog = true
     },
     close() {
       this.dialog = !this.dialog
     },
+    ...mapActions('tasker', ['updateTask']),
   },
 }
 </script>
