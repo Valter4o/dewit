@@ -22,5 +22,6 @@ export default {
         },
 
         fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'user', id }, { root: true }),
+
     },
 }

@@ -53,10 +53,6 @@ export default {
           text: 'Participants',
           value: 'participants',
         },
-        {
-          text: 'Status',
-          value: 'status',
-        },
       ],
     }
   },
@@ -82,12 +78,11 @@ export default {
             (user) => user._key === this.userId
           )
 
-          if (role && status) {
+          if (role) {
             const validObj = {
               name,
               participants: users.length,
               role,
-              status,
               id,
             }
             displayProjects.push(validObj)
