@@ -19,3 +19,9 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+database.rules.json
+.firebaserc
+.firebase/hosting.ZGlzdA.cache
+firebase.json
+firestore.indexes.json
+firestore.rules
