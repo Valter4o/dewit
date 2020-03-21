@@ -217,7 +217,7 @@ export default {
       return this.authUser()
     },
     assignedUser() {
-      return this.task.assignedUser.name
+      return this.task.assignedUser ? this.task.assignedUser.name : false
     },
   },
 
