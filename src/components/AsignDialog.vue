@@ -48,7 +48,6 @@ export default {
     asign(user) {
       const projectId = this.$router.currentRoute.params.id
 
-      this.task.assignedUser = user
       this.updateTask({ task: this.task, projectId })
       this.$emit('close')
     },
