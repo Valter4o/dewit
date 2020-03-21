@@ -17,6 +17,7 @@
           @click:row="redirectProject"
         >
         </v-data-table>
+        <CreateProject />
       </template>
       <template v-else>
         <v-progress-linear
@@ -35,9 +36,12 @@
 import firebase from 'firebase'
 import { mapActions, mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
+import CreateProject from '@/components/CreateProjectDialog'
 
 export default {
-  name: 'Home',
+  components: {
+    CreateProject,
+  },
   data() {
     return {
       headers: [
@@ -74,9 +78,9 @@ export default {
       const displayProjects = []
       const projects = Object.entries(this.$store.state.projects.items).forEach(
         ([id, { name, users }]) => {
-          const { role, status } = users.find(
-            (user) => user._key === this.userId
-          )
+          const { role } = users.find((user) => user._key === this.userId)
+            ? users.find((user) => user._key === this.userId)
+            : ''
 
           if (role) {
             const validObj = {

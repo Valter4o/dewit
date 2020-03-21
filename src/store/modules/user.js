@@ -22,6 +22,11 @@ export default {
         },
 
         fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'user', id }, { root: true }),
-
+        updateUser(_, { id, user }) {
+            firebase.firestore()
+                .collection('user')
+                .doc(id)
+                .update(user)
+        }
     },
 }

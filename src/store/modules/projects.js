@@ -1,3 +1,5 @@
+import firebase from 'firebase/app';
+
 export default {
     namespaced: true,
     state: {
@@ -16,6 +18,16 @@ export default {
                 id, resource: 'projects'
             }, {
                 root: true
+            }),
+        createProject(_, { project }) {
+            return new Promise((resolve, reject) => {
+                firebase.firestore()
+                    .collection('projects')
+                    .add(project)
+                    .then((id) => {
+                        resolve(id)
+                    })
             })
+        }
     }
-}
+} 

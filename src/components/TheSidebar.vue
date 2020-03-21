@@ -19,14 +19,12 @@
                 <tr>
                   <th class="text-left">Name</th>
                   <th class="text-left">Role</th>
-                  <th class="text-left">Status</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="user in userList" :key="user._key" @click="markUser">
+                <tr v-for="user in userList" :key="user._key">
                   <td class="text-left">{{ user.name }}</td>
                   <td class="text-left">{{ user.role }}</td>
-                  <td class="text-left">{{ user.status }}</td>
                 </tr>
               </tbody>
             </v-simple-table>
@@ -50,9 +48,6 @@ export default {
   mixins: [asyncDataStatus],
 
   methods: {
-    markUser() {
-      //Todo
-    },
     ...mapActions('projects', ['fetchProject']),
   },
 
