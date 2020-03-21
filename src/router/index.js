@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '@/views/Home';
 import ProjectHome from '@/views/ProjectHome'
-import UsersList from '@/views/UsersList'
 import TaskerMain from '@/views/TaskerMain'
 
 Vue.use(Router);
@@ -26,12 +25,7 @@ export default new Router({
             component: ProjectHome,
             props: true
         },
-        {
-            path: '/users/:id',
-            name: 'UsersList',
-            component: UsersList,
-            props: true
-        },
+
         {
             path: '/tasker/:id',
             name: 'Tasker',
