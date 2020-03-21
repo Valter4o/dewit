@@ -12,14 +12,4 @@ tells Anakin to execute Dooku and says DEWIT (Do it)
 
 In case you want to see it in action (plz don't):
 
-## Project setup
-
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-
-```
-npm run serve
-```
+https://dewit-77361.firebaseapp.com/
