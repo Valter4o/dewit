@@ -1,169 +1,174 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    max-width="60%"
-    persistent
-    overlay-opacity="0"
-    hide-overlay
-  >
-    <v-card>
-      <v-app-bar>
-        <v-avatar>
-          <img src="../assets/images/defaultUser/yoda.png" alt="Y" />
-        </v-avatar>
+  <div>
+    <v-dialog
+      v-model="dialog"
+      max-width="60%"
+      persistent
+      overlay-opacity="0"
+      hide-overlay
+    >
+      <v-card>
+        <v-app-bar>
+          <v-avatar>
+            <img src="../assets/images/defaultUser/yoda.png" alt="Y" />
+          </v-avatar>
 
-        <h4 :class="$style.userHeading" v-if="!assignedUser">
-          Unnasiggned
-        </h4>
-        <h4 :class="$style.userHeading" v-else>
-          {{ assignedUser }}
-        </h4>
-        <v-spacer />
+          <h4 :class="$style.userHeading" v-if="!assignedUser">
+            Unnasiggned
+          </h4>
+          <h4 :class="$style.userHeading" v-else>
+            {{ assignedUser }}
+          </h4>
+          <v-spacer />
 
-        <v-menu transition="slide-y-transition" bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn class="purple" color="primary" rounded dark v-on="on">
-              <ViewComfy />
-            </v-btn>
-          </template>
-
-          <v-list>
-            <v-list-item @click="asign">
-              <v-btn fab small color="orange">
-                <AccountArrowRight />
+          <v-menu transition="slide-y-transition" bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn class="purple" color="primary" rounded dark v-on="on">
+                <ViewComfy />
               </v-btn>
+            </template>
 
-              <v-list-item-title :class="$style.menuTitle"
-                >Asign to</v-list-item-title
-              >
-            </v-list-item>
+            <v-list>
+              <v-list-item @click="asign">
+                <v-btn fab small color="orange">
+                  <AccountArrowRight />
+                </v-btn>
 
-            <v-list-item @click="deleteTask">
-              <v-btn fab small color="red">
-                <DeleteForever />
-              </v-btn>
+                <v-list-item-title :class="$style.menuTitle"
+                  >Asign to</v-list-item-title
+                >
+              </v-list-item>
 
-              <v-list-item-title :class="$style.menuTitle">
-                Delete Task
-              </v-list-item-title>
-            </v-list-item>
+              <v-list-item @click="deleteT">
+                <v-btn fab small color="red">
+                  <DeleteForever />
+                </v-btn>
 
-            <v-list-item @click="complete">
-              <v-btn fab small color="green">
-                <ShieldCheck />
-              </v-btn>
+                <v-list-item-title :class="$style.menuTitle">
+                  Delete Task
+                </v-list-item-title>
+              </v-list-item>
 
-              <v-list-item-title :class="$style.menuTitle"
-                >Complete</v-list-item-title
-              >
-            </v-list-item>
+              <v-list-item @click="complete">
+                <v-btn fab small color="green">
+                  <ShieldCheck />
+                </v-btn>
 
-            <v-list-item @click="changeEditable">
-              <v-btn fab small color="blue">
-                <SquareEditOutline />
-              </v-btn>
+                <v-list-item-title :class="$style.menuTitle"
+                  >Complete</v-list-item-title
+                >
+              </v-list-item>
 
-              <v-list-item-title :class="$style.menuTitle"
-                >Edit</v-list-item-title
-              >
-            </v-list-item>
-          </v-list>
-        </v-menu>
+              <v-list-item @click="changeEditable">
+                <v-btn fab small color="blue">
+                  <SquareEditOutline />
+                </v-btn>
 
-        <v-btn @click="close" rounded>
-          X
-        </v-btn>
-      </v-app-bar>
+                <v-list-item-title :class="$style.menuTitle"
+                  >Edit</v-list-item-title
+                >
+              </v-list-item>
+            </v-list>
+          </v-menu>
 
-      <br />
-
-      <v-row>
-        <v-col :class="$style.leftCol">
-          <template v-if="edit">
-            <v-text-field v-model="task.title" flat> </v-text-field>
-
-            <br />
-            <v-text-field v-model="task.description" flat dense> </v-text-field>
-            <v-btn rounded color="red" @click="changeEditable">
-              Cancel
-            </v-btn>
-            <v-btn rounded color="green" @click="editTask"> Submit </v-btn>
-          </template>
-
-          <template v-else>
-            <h3>{{ task.title }}</h3>
-            <br />
-            <p>
-              {{ task.description }}
-            </p>
-          </template>
-
-          <v-btn rounded color="blue" @click="changeTodoDialog">
-            Go to the todolist for this task
-            <TodoList
-              :mainDialog="todoDialog"
-              :id="task.todoGroup"
-              @closeTodoList="closeTodoList"
-            />
+          <v-btn @click="close" rounded>
+            X
           </v-btn>
-          <br />
-          <div>
-            <h3>Comments</h3>
-            <v-card
-              outlined
-              class="mx-auto"
-              max-width="344"
-              v-for="comment in task.comments"
-              :key="comment.author"
-            >
-              <Comment :comment="comment" />
-            </v-card>
-          </div>
-        </v-col>
+        </v-app-bar>
 
-        <v-col>
-          <div>
-            <v-app-bar dense flat color="white">
-              <h3>Tags</h3>
-              <v-spacer />
-              <v-btn rounded @click="changeTagsShow">+</v-btn>
-              <Tags
-                :tagsDialogProp="tagDialog"
-                @closeTags="changeTagsShow"
-                @addTag="addTag"
+        <br />
+
+        <v-row>
+          <v-col :class="$style.leftCol">
+            <template v-if="edit">
+              <v-text-field v-model="task.title" flat> </v-text-field>
+
+              <br />
+              <v-text-field v-model="task.description" flat dense>
+              </v-text-field>
+              <v-btn rounded color="red" @click="changeEditable">
+                Cancel
+              </v-btn>
+              <v-btn rounded color="green" @click="editTask"> Submit </v-btn>
+            </template>
+
+            <template v-else>
+              <h3>{{ task.title }}</h3>
+              <br />
+              <p>
+                {{ task.description }}
+              </p>
+            </template>
+
+            <v-btn rounded color="blue" @click="changeTodoDialog">
+              Open Todo List for this task
+              <TodoList
+                :mainDialog="todoDialog"
+                :id="task.todoGroup"
+                @closeTodoList="closeTodoList"
               />
-            </v-app-bar>
-            <v-btn
-              :class="$style.tag"
-              small
-              rounded
-              v-for="tag in task.tags"
-              :color="tag.color"
-              :key="task.tags.indexOf(tag)"
-              @click="removeTag(tag)"
-              >{{ tag.value }}</v-btn
-            >
-          </div>
-          <br />
-
-          <div>
-            <h4>Add Comment</h4>
-            <br />
-            <v-textarea outlined v-model="newComment" label="Add Comment">
-            </v-textarea>
-            <v-btn rounded color="red" @click="addComment">
-              Comment
             </v-btn>
-          </div>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-dialog>
+            <br />
+            <div>
+              <h3>Comments</h3>
+              <v-card
+                outlined
+                class="mx-auto"
+                max-width="344"
+                v-for="comment in task.comments"
+                :key="comment.author"
+              >
+                <Comment :comment="comment" />
+              </v-card>
+            </div>
+          </v-col>
+
+          <v-col>
+            <div>
+              <v-app-bar dense flat color="white">
+                <h3>Tags</h3>
+                <v-spacer />
+                <v-btn rounded @click="changeTagsShow">+</v-btn>
+                <Tags
+                  :tagsDialogProp="tagDialog"
+                  @closeTags="changeTagsShow"
+                  @addTag="addTag"
+                />
+              </v-app-bar>
+              <v-btn
+                :class="$style.tag"
+                small
+                rounded
+                v-for="tag in task.tags"
+                :color="tag.color"
+                :key="task.tags.indexOf(tag)"
+                @click="removeTag(tag)"
+                >{{ tag.value }}</v-btn
+              >
+            </div>
+            <br />
+
+            <div>
+              <h4>Add Comment</h4>
+              <br />
+              <v-textarea outlined v-model="newComment" label="Add Comment">
+              </v-textarea>
+              <v-btn rounded color="red" @click="addComment">
+                Comment
+              </v-btn>
+            </div>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-dialog>
+    <AsignDialog :task="task" :dialogProp="assignDialog" @close="asign" />
+  </div>
 </template>
 
 <script>
 import Tags from '@/components/TagsShowDialog'
 import Comment from '@/components/TaskComment'
+import AsignDialog from '@/components/AsignDialog'
 import ViewComfy from 'vue-material-design-icons/ViewComfy'
 import AccountArrowRight from 'vue-material-design-icons/AccountArrowRight'
 import DeleteForever from 'vue-material-design-icons/DeleteForever'
@@ -182,6 +187,7 @@ export default {
     SquareEditOutline,
     Comment,
     TodoList,
+    AsignDialog,
   },
   props: {
     dialogProp: {
@@ -200,6 +206,7 @@ export default {
       newComment: '',
       edit: false,
       todoDialog: false,
+      assignDialog: false,
     }
   },
   computed: {
@@ -210,7 +217,7 @@ export default {
       return this.authUser()
     },
     assignedUser() {
-      return false
+      return this.task.assignedUser.name
     },
   },
 
@@ -272,22 +279,25 @@ export default {
     },
 
     asign() {
-      //Todo
-      console.log('asign')
+      this.assignDialog = !this.assignDialog
     },
-    deleteTask() {
-      //Todo
-      console.log('delete')
+    deleteT() {
+      //Todo bug
+      const projectId = this.$router.currentRoute.params.id
+      this.deleteTask({ taskId: this.task['_key'], projectId }).then(() => {
+        this.fetchTasks({ projectId })
+      })
     },
     complete() {
-      //Todo
-      console.log('complete')
+      const projectId = this.$router.currentRoute.params.id
+      this.task.status = 'Done'
+      this.updateTask({ task: this.task, projectId })
     },
 
     changeTagsShow() {
       this.tagDialog = !this.tagDialog
     },
-    ...mapActions('tasker', ['updateTask']),
+    ...mapActions('tasker', ['updateTask', 'deleteTask']),
     ...mapGetters('auth', ['authUser']),
   },
 }
