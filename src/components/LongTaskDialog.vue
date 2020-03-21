@@ -8,12 +8,15 @@
   >
     <v-card>
       <v-app-bar>
-        <v-btn fab small>
-          A
-        </v-btn>
+        <v-avatar>
+          <img src="../assets/images/defaultUser/yoda.png" alt="Y" />
+        </v-avatar>
 
-        <h4 :class="$style.userHeading">
+        <h4 :class="$style.userHeading" v-if="!assignedUser">
           Unnasiggned
+        </h4>
+        <h4 :class="$style.userHeading" v-else>
+          {{ assignedUser }}
         </h4>
         <v-spacer />
 
@@ -205,6 +208,9 @@ export default {
     },
     user() {
       return this.authUser()
+    },
+    assignedUser() {
+      return false
     },
   },
 
