@@ -32,11 +32,13 @@
           <CommentTextMultiple />
           <span :class="$style.commentsCount">{{ commentsCount }}</span>
         </template>
-        <!-- 
-        <template>
+
+        <template v-if="todos">
           <DnsOutline />
-          <span :class="$style.commentsCount">5</span>
-        </template> -->
+          <span :class="$style.commentsCount">
+            {{ todos.marked }}/{{ todos.total }}
+          </span>
+        </template>
         <v-spacer />
         <v-btn
           rounded
@@ -106,6 +108,19 @@ export default {
     commentsCount() {
       return this.task.comments.length
     },
+    todos() {
+      const t = this.$store.state.todoGroups.items[this.task.todoGroup]
+      if (t) {
+        const todos = t.todos
+        const total = todos.length
+        const markedTodos = todos.filter((todo) => todo.marked === true)
+        const marked = markedTodos ? markedTodos.length : 0
+        return {
+          marked,
+          total,
+        }
+      }
+    },
   },
 
   methods: {
@@ -137,6 +152,11 @@ export default {
       this.dialog = !this.dialog
     },
     ...mapActions('tasker', ['updateTask']),
+    ...mapActions('todoGroups', ['fetchGroup']),
+  },
+
+  created() {
+    this.fetchGroup({ id: this.task.todoGroup })
   },
 }
 </script>
