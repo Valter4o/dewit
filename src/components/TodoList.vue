@@ -77,6 +77,8 @@ import { mapActions } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 import Check from 'vue-material-design-icons/Check'
 import DeathStar from 'vue-material-design-icons/DeathStar'
+import playSound from '@/utils/playSound'
+
 require('howler')
 
 export default {
@@ -117,23 +119,15 @@ export default {
     close() {
       this.$emit('closeTodoList')
     },
-    playSound(src) {
-      var sound = new Howl({
-        autoplay: true,
-        src: [require(`../assets/sounds/${src}.mp3`)],
-        volume: 0.5,
-      })
-      sound.play()
-    },
 
     checkTodo(todo) {
       todo.marked = !todo.marked
       this.updateTodo({ todos: this.todos, groupId: this.id })
-      this.playSound('Gooood')
     },
 
     deleteTodo(todo) {
-      this.playSound('Do it')
+      playSound('Gooood')
+
       const todos = this.todos.filter((td) => td !== todo)
       this.updateTodo({ todos, groupId: this.id })
     },
