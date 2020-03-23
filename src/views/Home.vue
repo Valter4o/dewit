@@ -17,7 +17,6 @@
           @click:row="redirectProject"
         >
         </v-data-table>
-        <CreateProject />
       </template>
       <template v-else>
         <v-progress-linear
@@ -36,12 +35,8 @@
 import firebase from 'firebase'
 import { mapActions, mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
-import CreateProject from '@/components/CreateProjectDialog'
 
 export default {
-  components: {
-    CreateProject,
-  },
   data() {
     return {
       headers: [
