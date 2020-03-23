@@ -7,8 +7,8 @@
     v-model="tagsDialogProp"
   >
     <v-card outlined class="mx-auto">
-      <v-row>
-        <h1 :class="$style.tagHeader">Tags</h1>
+      <h1 :class="$style.tagHeader">
+        Tags
         <v-btn :class="$style.addTagButton" @click="changeCreateShow" rounded>
           +
         </v-btn>
@@ -18,12 +18,9 @@
           @close="changeCreateShow"
           @create="create"
         />
-        <v-spacer />
+      </h1>
+      <v-spacer />
 
-        <v-btn rounded @click="close" :class="$style.closeBtn">
-          Close
-        </v-btn>
-      </v-row>
       <v-container v-if="asyncDataStatus_ready">
         <v-btn
           rounded
@@ -34,6 +31,9 @@
           >{{ tag.value }}</v-btn
         >
       </v-container>
+      <v-btn rounded @click="close" :class="$style.closeBtn">
+        Close
+      </v-btn>
     </v-card>
   </v-dialog>
 </template>
@@ -113,7 +113,7 @@ export default {
 }
 
 .closeBtn {
-  margin-right: 20px;
+  margin-left: 80%;
   margin-top: 8px;
 }
 </style>
