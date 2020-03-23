@@ -32,9 +32,11 @@
         </div>
       </template>
       <template v-else>
-        <h3>
-          Select a project so you can see the users here
-        </h3>
+        <v-col>
+          <JoinProject />
+          <h2>Or</h2>
+          <CreateProject />
+        </v-col>
       </template>
     </v-navigation-drawer>
   </div>
@@ -43,10 +45,15 @@
 <script>
 import { mapActions } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
+import CreateProject from '@/components/CreateProjectDialog'
+import JoinProject from '@/components/JoinProjectDialog'
 
 export default {
   mixins: [asyncDataStatus],
-
+  components: {
+    CreateProject,
+    JoinProject,
+  },
   methods: {
     ...mapActions('projects', ['fetchProject']),
   },
