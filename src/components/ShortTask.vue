@@ -33,11 +33,13 @@
           <span :class="$style.commentsCount">{{ commentsCount }}</span>
         </template>
 
-        <template v-if="todos.total > 0">
-          <DnsOutline />
-          <span :class="$style.commentsCount">
-            {{ todos.marked }}/{{ todos.total }}
-          </span>
+        <template v-if="todos">
+          <template v-if="todos.total > 0">
+            <DnsOutline />
+            <span :class="$style.commentsCount">
+              {{ todos.marked }}/{{ todos.total }}
+            </span>
+          </template>
         </template>
         <v-spacer />
         <v-btn
@@ -115,6 +117,7 @@ export default {
         const total = todos.length
         const markedTodos = todos.filter((todo) => todo.marked === true)
         const marked = markedTodos ? markedTodos.length : 0
+
         return {
           marked,
           total,
