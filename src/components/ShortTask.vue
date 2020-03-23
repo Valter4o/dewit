@@ -33,7 +33,7 @@
           <span :class="$style.commentsCount">{{ commentsCount }}</span>
         </template>
 
-        <template v-if="todos">
+        <template v-if="todos.total > 0">
           <DnsOutline />
           <span :class="$style.commentsCount">
             {{ todos.marked }}/{{ todos.total }}
