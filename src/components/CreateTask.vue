@@ -1,26 +1,28 @@
 <template>
   <v-dialog max-width="600" persistent v-model="dialog">
-    <v-card class="mx-auto" max-width="600">
-      <v-row>
-        <h3 :class="$style.title">
-          Create Task
-        </h3>
-        <v-spacer />
-        <v-btn fab small :class="$style.closeBtn" @click="close">
-          x
-        </v-btn>
-      </v-row>
-      <v-col>
-        <v-text-field label="Title" v-model="title"></v-text-field>
+    <v-card class="mx-auto" max-width="100%">
+      <v-btn fab small :class="$style.closeBtn" @click="close">
+        x
+      </v-btn>
+      <h3 :class="$style.title">
+        Create Task
+      </h3>
+      <v-spacer />
+      <v-text-field
+        label="Title"
+        v-model="title"
+        :class="$style.textField"
+      ></v-text-field>
 
-        <v-text-field label="Description" v-model="description"></v-text-field>
-      </v-col>
-      <v-row>
-        <v-spacer />
-        <v-btn :class="$style.submitBtn" rounded color="orange" @click="submit"
-          >Submit</v-btn
-        >
-      </v-row>
+      <v-text-field
+        label="Description"
+        v-model="description"
+        :class="$style.textField"
+      ></v-text-field>
+      <v-spacer />
+      <v-btn :class="$style.submitBtn" rounded color="orange" @click="submit"
+        >Submit</v-btn
+      >
     </v-card>
   </v-dialog>
 </template>
@@ -73,15 +75,17 @@ export default {
 
 <style module>
 .closeBtn {
-  margin-right: 50px;
+  margin-left: 80%;
   margin-top: 10px;
 }
 .submitBtn {
-  margin-right: 50px;
+  margin-left: 80%;
   margin-bottom: 20px;
 }
 .title {
   margin-left: 50px;
-  margin-top: 15px;
+}
+.textField {
+  margin-left: 20px;
 }
 </style>
