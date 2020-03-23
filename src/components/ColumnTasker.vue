@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card width="25%">
     <v-col>
       <v-app-bar :color="color">
         <template v-if="status === 'Inbox'">
