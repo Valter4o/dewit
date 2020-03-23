@@ -28,6 +28,12 @@ export default {
                         resolve(id)
                     })
             })
+        },
+        updateProject(_, { project, projectId }) {
+            return firebase.firestore()
+                .collection('projects')
+                .doc(projectId)
+                .update(project)
         }
     }
 } 
