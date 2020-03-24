@@ -11,6 +11,14 @@
               {{ project.description }}
             </p>
           </v-card-text>
+          <v-card-text>
+            <h1>Project ID (used to add new users)</h1>
+            <br />
+            <p>
+              {{ project._key }}
+            </p>
+          </v-card-text>
+
           <router-link :to="{ name: 'Tasker' }">
             <v-btn text rounded="rounded" max-width="200px" color="deep-purple">
               <InboxFull />
