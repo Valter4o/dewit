@@ -48,6 +48,12 @@ export default {
                         resolve(docRef.id);
                     })
             })
+        },
+        deleteTodoGroup(_, { todoGroupId }) {
+            return firebase.firestore()
+                .collection('todoGroups')
+                .doc(todoGroupId)
+                .delete()
         }
     }
 }
