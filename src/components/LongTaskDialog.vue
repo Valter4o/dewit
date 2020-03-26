@@ -283,9 +283,17 @@ export default {
     },
     deleteT() {
       const projectId = this.$router.currentRoute.params.id
+      const todoGroupId = this.task.todoGroup
+      const todoGroups = Object.keys(this.$store.state.todoGroups.items).filter(
+        (id) => id !== todoGroupId
+      )
       this.deleteTask({ taskId: this.task['_key'], projectId }).then(() => {
+        this.updateTodoGroupsArray({ todoGroups, projectId })
+        this.deleteTodoGroup({ todoGroupId })
+        this.delTasker({ projectId })
         this.fetchTasks({ projectId })
         this.close()
+        this.$router.push({ name: 'Home' })
       })
     },
     complete() {
@@ -297,7 +305,14 @@ export default {
     changeTagsShow() {
       this.tagDialog = !this.tagDialog
     },
-    ...mapActions('tasker', ['updateTask', 'deleteTask', 'fetchTasks']),
+    ...mapActions('tasker', [
+      'updateTask',
+      'deleteTask',
+      'fetchTasks',
+      'delTasker',
+      'updateTodoGroupsArray',
+    ]),
+    ...mapActions('todoGroups', ['deleteTodoGroup']),
     ...mapGetters('auth', ['authUser']),
   },
 }
