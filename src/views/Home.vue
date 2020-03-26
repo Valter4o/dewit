@@ -7,26 +7,31 @@
       <!--  -->
       Welcome to the best project manager you have ever seen
     </p>
-
-    <template v-if="loggedIn">
-      <template v-if="asyncDataStatus_ready">
-        <v-data-table
-          :headers="headers"
-          :items="projects"
-          :hide-default-footer="true"
-          @click:row="redirectProject"
-        >
-        </v-data-table>
-      </template>
-      <template v-else>
-        <v-progress-linear
-          indeterminate
-          color="yellow darken-2"
-        ></v-progress-linear>
-      </template>
+    <template v-if="load">
+      <v-progress-circular :size="50" color="primary" indeterminate>
+      </v-progress-circular>
     </template>
     <template v-else>
-      <h3>Loggin or Register to see your projects</h3>
+      <template v-if="loggedIn">
+        <template v-if="asyncDataStatus_ready">
+          <v-data-table
+            :headers="headers"
+            :items="projects"
+            :hide-default-footer="true"
+            @click:row="redirectProject"
+          >
+          </v-data-table>
+        </template>
+        <template v-else>
+          <v-progress-linear
+            indeterminate
+            color="yellow darken-2"
+          ></v-progress-linear>
+        </template>
+      </template>
+      <template v-else>
+        <h3>Loggin or Register to see your projects</h3>
+      </template>
     </template>
   </div>
 </template>
@@ -39,6 +44,7 @@ import asyncDataStatus from '@/mixins/asyncDataStatus'
 export default {
   data() {
     return {
+      load: false,
       headers: [
         {
           text: 'Project Name',
@@ -119,8 +125,12 @@ export default {
   },
 
   created() {
-    this.userId
-    this.getProjects()
+    this.load = true
+    setTimeout(() => {
+      this.userId
+      this.getProjects()
+      this.load = false
+    }, 1500)
   },
   updated() {
     this.getProjects()
