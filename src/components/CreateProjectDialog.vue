@@ -76,30 +76,35 @@ export default {
           role: 'Creator',
         })
 
-        const firstTask = {
-          status: 'To do',
-          title: `Welcome to the tasker for ${project.name}`,
-          description: 'You may delete this task and start making your own',
-          comments: [],
-          tags: [],
-        }
+        this.createTodoGroup().then((todoGroupId) => {
+          const firstTask = {
+            status: 'To do',
+            title: `Welcome to the tasker for ${project.name}`,
+            description: 'You may delete this task and start making your own',
+            comments: [],
+            tags: [],
+            todoGroup: todoGroupId,
+            createdAt: Date.now(),
+          }
 
-        this.createTasker({ id, firstTask }).then(() => {
-          this.updateUser({ id: u._key, user: u }).then(() => {
-            this.createProjectTags({ id }).then(() => {
-              this.creating = false
-              this.close()
-              this.$router.push({
-                name: 'Tasker',
-                params: {
-                  id,
-                },
+          this.createTasker({ id, firstTask }).then(() => {
+            this.updateUser({ id: u._key, user: u }).then(() => {
+              this.createProjectTags({ id }).then(() => {
+                this.creating = false
+                this.close()
+                this.$router.push({
+                  name: 'Tasker',
+                  params: {
+                    id,
+                  },
+                })
               })
             })
           })
         })
       })
     },
+    ...mapActions('todoGroups', ['createTodoGroup']),
     ...mapActions('projects', ['createProject']),
     ...mapActions('tasker', ['createTasker']),
     ...mapActions('tags', ['createProjectTags']),
