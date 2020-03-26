@@ -48,26 +48,29 @@ export default {
     },
 
     submit() {
-      this.createTodoGroup().then((id) => {
-        const task = {
-          title: this.title,
-          description: this.description,
-          status: 'Inbox',
-          todoGroup: id,
-          createdAt: Date.now(),
-          comments: [],
-          tags: [],
-        }
-        const projectId = this.$router.currentRoute.params.id
+      const projectId = this.$router.currentRoute.params.id
 
-        this.createTask({ projectId, task }).then(() => {
-          this.title = ''
-          this.description = ''
-          this.close()
-        })
-      })
+      this.fetchTodoGroups({ projectId })
+      // this.createTodoGroup().then((id) => {
+      //   const task = {
+      //     title: this.title,
+      //     description: this.description,
+      //     status: 'Inbox',
+      //     todoGroup: id,
+      //     createdAt: Date.now(),
+      //     comments: [],
+      //     tags: [],
+      //   }
+      //   const projectId = this.$router.currentRoute.params.id
+
+      //   this.createTask({ projectId, task,todoGroups }).then(() => {
+      //     this.title = ''
+      //     this.description = ''
+      //     this.close()
+      //   })
+      // })
     },
-    ...mapActions('tasker', ['createTask']),
+    ...mapActions('tasker', ['createTask', 'fetchTodoGroups']),
     ...mapActions('todoGroups', ['createTodoGroup']),
   },
 }

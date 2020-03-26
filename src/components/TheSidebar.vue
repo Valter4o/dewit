@@ -1,49 +1,54 @@
 <template>
   <div>
     <v-navigation-drawer app clipped width="300">
-      <template v-if="id">
-        <br />
+      <template v-if="isLoggedIn">
+        <template v-if="id">
+          <br />
 
-        <router-link :to="{ name: 'ProjectHome' }">
-          <v-btn rounded color="green">
-            Go to project details
-          </v-btn>
-        </router-link>
-        <div v-if="asyncDataStatus_ready">
-          <br />
-          <h1>Users in {{ projectName }}</h1>
-          <br />
-          <v-card class="mx-auto">
-            <v-simple-table>
-              <thead>
-                <tr>
-                  <th class="text-left">Name</th>
-                  <th class="text-left">Role</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="user in userList" :key="user._key">
-                  <td class="text-left">{{ user.name }}</td>
-                  <td class="text-left">{{ user.role }}</td>
-                </tr>
-              </tbody>
-            </v-simple-table>
-          </v-card>
-        </div>
+          <router-link :to="{ name: 'ProjectHome' }">
+            <v-btn rounded color="green">
+              Go to project details
+            </v-btn>
+          </router-link>
+          <div v-if="asyncDataStatus_ready">
+            <br />
+            <h1>Users in {{ projectName }}</h1>
+            <br />
+            <v-card class="mx-auto">
+              <v-simple-table>
+                <thead>
+                  <tr>
+                    <th class="text-left">Name</th>
+                    <th class="text-left">Role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="user in userList" :key="user._key">
+                    <td class="text-left">{{ user.name }}</td>
+                    <td class="text-left">{{ user.role }}</td>
+                  </tr>
+                </tbody>
+              </v-simple-table>
+            </v-card>
+          </div>
+        </template>
+        <template v-else>
+          <v-col>
+            <JoinProject />
+            <h2>Or</h2>
+            <CreateProject />
+          </v-col>
+        </template>
       </template>
       <template v-else>
-        <v-col>
-          <JoinProject />
-          <h2>Or</h2>
-          <CreateProject />
-        </v-col>
+        <h2>Log in in order to be able to create or join projects</h2>
       </template>
     </v-navigation-drawer>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 import CreateProject from '@/components/CreateProjectDialog'
 import JoinProject from '@/components/JoinProjectDialog'
@@ -55,10 +60,14 @@ export default {
     JoinProject,
   },
   methods: {
+    ...mapGetters('auth', ['authUser']),
     ...mapActions('projects', ['fetchProject']),
   },
 
   computed: {
+    isLoggedIn() {
+      return this.authUser()
+    },
     userList() {
       return this.$store.state.projects.items[this.id].users
     },

@@ -1,4 +1,5 @@
 import firebase from 'firebase/app'
+import { TestScheduler } from 'jest'
 
 export default {
     namespaced: true,
@@ -29,15 +30,26 @@ export default {
                     })
             })
         },
-        createTask(ctx, { projectId, task }) {
+        fetchTodoGroups: ({ dispatch }, { projectId }) =>
+            dispatch('fetchItem', {
+                id: projectId, resource: 'tasker'
+            }, { root: true })
+        ,
+        createTask(ctx, { projectId, task, todoGroups }) {
             return new Promise((resolve, reject) => {
                 firebase.firestore()
                     .collection('tasker')
                     .doc(projectId)
-                    .collection('tasks')
-                    .add(task)
-                    .then(() => {
-                        resolve();
+                    .update(todoGroups).then(() => {
+
+                        firebase.firestore()
+                            .collection('tasker')
+                            .doc(projectId)
+                            .collection('tasks')
+                            .add(task)
+                            .then(() => {
+                                resolve();
+                            })
                     })
             })
         },
@@ -58,6 +70,19 @@ export default {
                 .delete()
 
         },
+        createTasker(_, { id, firstTask }) {
+            return firebase.firestore()
+                .collection('tasker')
+                .doc(id)
+                .collection('tasks')
+                .add(firstTask)
+        },
+        delTasker(_, { id }) {
+            return firebase.firestore()
+                .collection('tasker')
+                .doc(id)
+                .delete()
+        }
 
     }
-} 
+}

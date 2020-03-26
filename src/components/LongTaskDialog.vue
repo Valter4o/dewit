@@ -282,10 +282,10 @@ export default {
       this.assignDialog = !this.assignDialog
     },
     deleteT() {
-      //Todo bug
       const projectId = this.$router.currentRoute.params.id
       this.deleteTask({ taskId: this.task['_key'], projectId }).then(() => {
         this.fetchTasks({ projectId })
+        this.close()
       })
     },
     complete() {
@@ -297,7 +297,7 @@ export default {
     changeTagsShow() {
       this.tagDialog = !this.tagDialog
     },
-    ...mapActions('tasker', ['updateTask', 'deleteTask']),
+    ...mapActions('tasker', ['updateTask', 'deleteTask', 'fetchTasks']),
     ...mapGetters('auth', ['authUser']),
   },
 }
