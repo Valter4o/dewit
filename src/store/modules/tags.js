@@ -17,20 +17,6 @@ export default {
                 .collection('tags')
                 .doc(id)
                 .update({ tags })
-        },
-        createProjectTags(_, { id }) {
-            return firebase.firestore()
-                .collection('tags')
-                .doc(id)
-                .set({
-                    tags: []
-                })
-        },
-        delTags(_, { id }) {
-            return firebase.firestore()
-                .collection('tags')
-                .doc(id)
-                .delete()
         }
     }
 } 

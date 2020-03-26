@@ -28,12 +28,6 @@
         <v-btn color="blue darken-1" text @click="close">Close</v-btn>
         <v-btn color="blue darken-1" text @click="create">Create</v-btn>
       </v-card-actions>
-      <v-progress-linear
-        indeterminate
-        height="7"
-        color="yellow darken-2"
-        v-if="creating"
-      ></v-progress-linear>
     </v-card>
   </v-dialog>
 </template>
@@ -45,7 +39,6 @@ export default {
     dialog: false,
     name: '',
     description: '',
-    creating: false,
   }),
 
   methods: {
@@ -53,14 +46,12 @@ export default {
       this.dialog = false
     },
     create() {
-      this.creating = true
       const users = []
       const user = {
         _key: this.authUser()._key,
         name: this.authUser().name,
         role: 'Creator',
       }
-
       users.push(user)
 
       const project = {
@@ -76,33 +67,11 @@ export default {
           role: 'Creator',
         })
 
-        const firstTask = {
-          status: 'To do',
-          title: `Welcome to the tasker for ${project.name}`,
-          description: 'You may delete this task and start making your own',
-          comments: [],
-          tags: [],
-        }
-
-        this.createTasker({ id, firstTask }).then(() => {
-          this.updateUser({ id: u._key, user: u }).then(() => {
-            this.createProjectTags({ id }).then(() => {
-              this.creating = false
-              this.close()
-              this.$router.push({
-                name: 'Tasker',
-                params: {
-                  id,
-                },
-              })
-            })
-          })
-        })
+        this.updateUser({ id: u._key, user: u })
+        this.close()
       })
     },
     ...mapActions('projects', ['createProject']),
-    ...mapActions('tasker', ['createTasker']),
-    ...mapActions('tags', ['createProjectTags']),
     ...mapActions('user', ['updateUser']),
     ...mapGetters('auth', ['authUser']),
   },

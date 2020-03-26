@@ -34,12 +34,6 @@ export default {
                 .collection('projects')
                 .doc(projectId)
                 .update(project)
-        },
-        deleteProject(_, { id }) {
-            return firebase.firestore()
-                .collection('projects')
-                .doc(id)
-                .delete()
         }
     }
 } 

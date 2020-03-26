@@ -17,15 +17,12 @@
             <p>
               {{ project._key }}
             </p>
-            <br />
-            <v-btn rounded color="deep-purple" @click="deleteProj">
-              Delete Project
-            </v-btn>
           </v-card-text>
 
           <router-link :to="{ name: 'Tasker' }">
             <v-btn text rounded="rounded" max-width="200px" color="deep-purple">
               <InboxFull />
+
               Tasker
             </v-btn>
           </router-link>
@@ -63,7 +60,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 import InboxFull from 'vue-material-design-icons/InboxFull'
 import CheckBoxMultipleOutline from 'vue-material-design-icons/CheckBoxMultipleOutline'
@@ -98,23 +95,8 @@ export default {
   mixins: [asyncDataStatus],
 
   methods: {
-    deleteProj() {
-      this.deleteProject({ id: this.id }).then(() => {
-        let user = this.authUser()
-        user.projects = user.projects.filter((p) => p.id !== this.id)
-        this.updateUser({ user, id: user._key }).then(() => {
-          this.delTags({ id: this.id }).then(() => {
-            this.$router.push({ name: 'Home' })
-            this.delTasker({ id: this.id })
-          })
-        })
-      })
-    },
-    ...mapActions('projects', ['fetchProject', 'deleteProject']),
-    ...mapActions('user', ['updateUser']),
-    ...mapActions('tasker', ['delTasker']),
-    ...mapActions('tags', ['delTags']),
-    ...mapGetters('auth', ['authUser']),
+    redirect() {},
+    ...mapActions('projects', ['fetchProject']),
   },
 
   created() {
