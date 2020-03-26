@@ -99,13 +99,14 @@ export default {
 
   methods: {
     deleteProj() {
-      this.deleteProject({ id: this.id }).then(() => {
-        let user = this.authUser()
-        user.projects = user.projects.filter((p) => p.id !== this.id)
-        this.updateUser({ user, id: user._key }).then(() => {
-          this.delTags({ id: this.id }).then(() => {
-            this.$router.push({ name: 'Home' })
-            this.delTasker({ id: this.id })
+      let user = this.authUser()
+      user.projects = user.projects.filter((p) => p.id !== this.id)
+      this.updateUser({ user, id: user._key }).then(() => {
+        this.delTags({ id: this.id }).then(() => {
+          this.delTasker({ projectId: this.id }).then(() => {
+            this.deleteProject({ id: this.id }).then(() => {
+              this.$router.push({ name: 'Home' })
+            })
           })
         })
       })
