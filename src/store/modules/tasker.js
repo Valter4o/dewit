@@ -1,11 +1,21 @@
 import firebase from 'firebase/app'
-import { TestScheduler } from 'jest'
+
+function updateTodoGroups(todoGroups, projectId) {
+    return firebase.firestore()
+        .collection('tasker')
+        .doc(projectId)
+        .update({ todoGroups })
+}
+
+const getDefaultState = () => {
+    return {
+        items: {},
+    }
+}
 
 export default {
     namespaced: true,
-    state: {
-        items: {}
-    },
+    state: getDefaultState(),
 
     getters: {
         filteredTasks: (state, getters, rootState) => (status) => {
@@ -37,20 +47,16 @@ export default {
         ,
         createTask(ctx, { projectId, task, todoGroups }) {
             return new Promise((resolve, reject) => {
-                firebase.firestore()
-                    .collection('tasker')
-                    .doc(projectId)
-                    .update(todoGroups).then(() => {
-
-                        firebase.firestore()
-                            .collection('tasker')
-                            .doc(projectId)
-                            .collection('tasks')
-                            .add(task)
-                            .then(() => {
-                                resolve();
-                            })
-                    })
+                updateTodoGroups(todoGroups, projectId).then(() => {
+                    firebase.firestore()
+                        .collection('tasker')
+                        .doc(projectId)
+                        .collection('tasks')
+                        .add(task)
+                        .then(() => {
+                            resolve();
+                        })
+                })
             })
         },
         updateTask(_, { task, projectId }) {
@@ -61,28 +67,45 @@ export default {
                 .doc(task['_key'])
                 .update(task)
         },
-        deleteTask(_, { taskId, projectId }) {
+        deleteTask({ commit }, { taskId, projectId }) {
             firebase.firestore()
                 .collection('tasker')
                 .doc(projectId)
                 .collection('tasks')
                 .doc(taskId)
                 .delete()
+                .then(() => {
+                    commit('resetState')
+                })
 
         },
         createTasker(_, { id, firstTask }) {
+            firebase.firestore()
+                .collection('tasker')
+                .doc(id)
+                .set({
+                    todoGroups: []
+                })
             return firebase.firestore()
                 .collection('tasker')
                 .doc(id)
                 .collection('tasks')
                 .add(firstTask)
         },
-        delTasker(_, { id }) {
+        delTasker(_, { projectId }) {
             return firebase.firestore()
                 .collection('tasker')
-                .doc(id)
+                .doc(projectId)
                 .delete()
+        },
+        updateTodoGroupsArray(_, { todoGroups, projectId }) {
+            return updateTodoGroups(todoGroups, projectId)
         }
+    },
 
+    mutations: {
+        resetState(state) {
+            Object.assign(state, getDefaultState())
+        }
     }
 }
