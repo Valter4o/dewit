@@ -1,11 +1,13 @@
 import firebase from 'firebase/app';
 
+const getDefaultState = () => {
+    return {
+        items: {},
+    }
+}
 export default {
     namespaced: true,
-    state: {
-        items: {}
-    },
-
+    state: getDefaultState(),
     actions: {
         fetchProjects: ({ dispatch }, { ids }) =>
             dispatch('fetchItems', {
@@ -35,11 +37,19 @@ export default {
                 .doc(projectId)
                 .update(project)
         },
-        deleteProject(_, { id }) {
+        deleteProject({ commit }, { id }) {
             return firebase.firestore()
                 .collection('projects')
                 .doc(id)
-                .delete()
+                .delete().then(() => {
+                    commit('resetState')
+                    return Promise.resolve()
+                })
+        }
+    },
+    mutations: {
+        resetState(state) {
+            Object.assign(state, getDefaultState())
         }
     }
 } 
