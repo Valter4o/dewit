@@ -78,7 +78,7 @@ export default {
 
         this.createTodoGroup().then((todoGroupId) => {
           const firstTask = {
-            status: 'To do',
+            status: 'Inbox',
             title: `Welcome to the tasker for ${project.name}`,
             description: 'You may delete this task and start making your own',
             comments: [],
