@@ -3,7 +3,6 @@
     <v-card
       class="mx-auto"
       max-width="360"
-      min-width="360"
       outlined
       elevation="5"
       @click="displayDialog"
