@@ -8,8 +8,10 @@
       Welcome to the best project manager you have ever seen
     </p>
     <template v-if="load">
-      <v-progress-circular :size="50" color="primary" indeterminate>
-      </v-progress-circular>
+      <v-progress-linear
+        indeterminate
+        color="yellow darken-2"
+      ></v-progress-linear>
     </template>
     <template v-else>
       <template v-if="loggedIn">
