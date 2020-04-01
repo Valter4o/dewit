@@ -1,5 +1,10 @@
 <template>
   <v-dialog v-model="dialog" width="300">
+    <template v-slot:activator="{ on }">
+      <v-btn fab small color="orange" v-on="on">
+        <AccountArrowRight />
+      </v-btn>
+    </template>
     <v-card v-if="asyncDataStatus_ready">
       <v-col>
         <h1>Users in {{ projectName }}</h1>
@@ -30,15 +35,17 @@
 <script>
 import { mapActions } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
+import AccountArrowRight from 'vue-material-design-icons/AccountArrowRight'
 
 export default {
   mixins: [asyncDataStatus],
-
+  components: {
+    AccountArrowRight,
+  },
+  data: () => ({
+    dialog: false,
+  }),
   props: {
-    dialogProp: {
-      type: Boolean,
-      required: true,
-    },
     task: {
       type: Object,
       required: true,
@@ -48,17 +55,16 @@ export default {
     asign(user) {
       const projectId = this.$router.currentRoute.params.id
 
-      this.updateTask({ task: this.task, projectId })
-      this.$emit('close')
+      const task = this.task
+      task.assignedUser = user
+      this.updateTask({ task, projectId })
+      this.dialog = false
     },
     ...mapActions('projects', ['fetchProject']),
     ...mapActions('tasker', ['updateTask']),
   },
 
   computed: {
-    dialog() {
-      return this.dialogProp
-    },
     userList() {
       return this.$store.state.projects.items[this.id].users
     },
