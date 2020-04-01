@@ -9,8 +9,15 @@
     <v-card outlined class="mx-auto">
       <h1 :class="$style.tagHeader">
         Tags
-        <v-btn :class="$style.addTagButton" @click="changeCreateShow" rounded>
+        <v-btn :class="$style.headerButton" @click="changeCreateShow" rounded>
           +
+        </v-btn>
+        <v-btn
+          :class="$style.headerButton"
+          rounded
+          @click="deleting = !deleting"
+        >
+          Delete Tag
         </v-btn>
 
         <Create
@@ -28,8 +35,19 @@
           v-for="tag in tags"
           :key="tags.indexOf(tag)"
           :color="tag.color"
-          >{{ tag.value }}</v-btn
-        >
+          >{{ tag.value }}
+          <template v-if="deleting">
+            <v-btn
+              height="30"
+              width="30"
+              fab
+              small
+              @click="removeTag(tag, $event)"
+            >
+              -
+            </v-btn>
+          </template>
+        </v-btn>
       </v-container>
       <v-btn rounded @click="close" :class="$style.closeBtn">
         Close
@@ -60,6 +78,7 @@ export default {
   data() {
     return {
       createDialog: false,
+      deleting: false,
     }
   },
 
@@ -91,6 +110,11 @@ export default {
     addToTask(tag) {
       this.$emit('addTag', tag)
     },
+    removeTag(t, e) {
+      e.cancelBubble = true
+      const tags = this.tags.filter((tag) => tag != t)
+      this.updateTags({ tags, id: this.projectId })
+    },
     ...mapActions('tags', ['fetchTags', 'updateTags']),
   },
 
@@ -107,7 +131,7 @@ export default {
   margin-left: 20px;
 }
 
-.addTagButton {
+.headerButton {
   margin-left: 20px;
   margin-top: 8px;
 }
