@@ -8,74 +8,7 @@
       hide-overlay
     >
       <v-card>
-        <v-app-bar>
-          <v-avatar>
-            <img src="../assets/images/defaultUser/yoda.png" alt="Y" />
-          </v-avatar>
-
-          <h4 :class="$style.userHeading" v-if="!assignedUser">
-            Unnasiggned
-          </h4>
-          <h4 :class="$style.userHeading" v-else>
-            {{ assignedUser }}
-          </h4>
-          <v-spacer />
-
-          <v-menu transition="slide-y-transition" bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn class="purple" color="primary" rounded dark v-on="on">
-                <ViewComfy />
-              </v-btn>
-            </template>
-
-            <v-list>
-              <v-list-item @click="asign">
-                <v-btn fab small color="orange">
-                  <AccountArrowRight />
-                </v-btn>
-
-                <v-list-item-title :class="$style.menuTitle"
-                  >Asign to</v-list-item-title
-                >
-              </v-list-item>
-
-              <v-list-item @click="deleteT">
-                <v-btn fab small color="red">
-                  <DeleteForever />
-                </v-btn>
-
-                <v-list-item-title :class="$style.menuTitle">
-                  Delete Task
-                </v-list-item-title>
-              </v-list-item>
-
-              <v-list-item @click="complete">
-                <v-btn fab small color="green">
-                  <ShieldCheck />
-                </v-btn>
-
-                <v-list-item-title :class="$style.menuTitle"
-                  >Complete</v-list-item-title
-                >
-              </v-list-item>
-
-              <v-list-item @click="changeEditable">
-                <v-btn fab small color="blue">
-                  <SquareEditOutline />
-                </v-btn>
-
-                <v-list-item-title :class="$style.menuTitle"
-                  >Edit</v-list-item-title
-                >
-              </v-list-item>
-            </v-list>
-          </v-menu>
-
-          <v-btn @click="close" rounded>
-            X
-          </v-btn>
-        </v-app-bar>
-
+        <Navbar @close="close" @edit="changeEditable" :task="task" />
         <br />
 
         <v-row>
@@ -161,33 +94,22 @@
         </v-row>
       </v-card>
     </v-dialog>
-    <AsignDialog :task="task" :dialogProp="assignDialog" @close="asign" />
   </div>
 </template>
 
 <script>
 import Tags from '@/components/TagsShowDialog'
 import Comment from '@/components/TaskComment'
-import AsignDialog from '@/components/AsignDialog'
-import ViewComfy from 'vue-material-design-icons/ViewComfy'
-import AccountArrowRight from 'vue-material-design-icons/AccountArrowRight'
-import DeleteForever from 'vue-material-design-icons/DeleteForever'
-import ShieldCheck from 'vue-material-design-icons/ShieldCheck'
-import SquareEditOutline from 'vue-material-design-icons/SquareEditOutline'
 import TodoList from '@/components/TodoList'
+import Navbar from '@/components/LongDialogNavbar'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
-    ViewComfy,
-    AccountArrowRight,
-    DeleteForever,
-    ShieldCheck,
+    Navbar,
     Tags,
-    SquareEditOutline,
     Comment,
     TodoList,
-    AsignDialog,
   },
   props: {
     dialogProp: {
@@ -206,7 +128,6 @@ export default {
       newComment: '',
       edit: false,
       todoDialog: false,
-      assignDialog: false,
     }
   },
   computed: {
@@ -228,6 +149,14 @@ export default {
     closeTodoList() {
       this.todoDialog = !this.todoDialog
     },
+    changeEditable() {
+      this.edit = !this.edit
+    },
+    editTask() {
+      const projectId = this.$router.currentRoute.params.id
+      this.updateTask({ task: this.task, projectId })
+      this.edit = false
+    },
     addTag(tag) {
       const task = this.task
 
@@ -245,16 +174,6 @@ export default {
 
       this.task.tags.splice(this.task.tags.indexOf(tag), 1)
       this.updateTask({ task: this.task, projectId })
-    },
-
-    changeEditable() {
-      this.edit = !this.edit
-    },
-
-    editTask() {
-      const projectId = this.$router.currentRoute.params.id
-      this.updateTask({ task: this.task, projectId })
-      this.edit = false
     },
 
     addComment() {
@@ -278,30 +197,6 @@ export default {
       this.todoDialog = !this.todoDialog
     },
 
-    asign() {
-      this.assignDialog = !this.assignDialog
-    },
-    deleteT() {
-      const projectId = this.$router.currentRoute.params.id
-      const todoGroupId = this.task.todoGroup
-      const todoGroups = Object.keys(this.$store.state.todoGroups.items).filter(
-        (id) => id !== todoGroupId
-      )
-      this.deleteTask({ taskId: this.task['_key'], projectId }).then(() => {
-        this.updateTodoGroupsArray({ todoGroups, projectId })
-        this.deleteTodoGroup({ todoGroupId })
-        this.delTasker({ projectId })
-        this.fetchTasks({ projectId })
-        this.close()
-        this.$router.push({ name: 'Home' })
-      })
-    },
-    complete() {
-      const projectId = this.$router.currentRoute.params.id
-      this.task.status = 'Done'
-      this.updateTask({ task: this.task, projectId })
-    },
-
     changeTagsShow() {
       this.tagDialog = !this.tagDialog
     },
@@ -319,12 +214,9 @@ export default {
 </script>
 
 <style module>
-.leftCol,
-.userHeading,
-.menuTitle {
+.leftCol {
   margin-left: 20px;
 }
-
 .tag {
   margin: 5px;
 }
