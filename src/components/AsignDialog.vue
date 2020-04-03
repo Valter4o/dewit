@@ -53,15 +53,14 @@ export default {
   },
   methods: {
     asign(user) {
-      const projectId = this.$router.currentRoute.params.id
-
       const task = this.task
+      const taskId = task._key
       task.assignedUser = user
-      this.updateTask({ task, projectId })
+      this.updateTask({ task, taskId })
       this.dialog = false
     },
     ...mapActions('projects', ['fetchProject']),
-    ...mapActions('tasker', ['updateTask']),
+    ...mapActions('tasks', ['updateTask']),
   },
 
   computed: {
