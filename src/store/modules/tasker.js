@@ -1,12 +1,5 @@
 import firebase from 'firebase/app'
 
-function updateTodoGroups(todoGroups, projectId) {
-    return firebase.firestore()
-        .collection('tasker')
-        .doc(projectId)
-        .update({ todoGroups })
-}
-
 const getDefaultState = () => {
     return {
         items: {},
@@ -18,88 +11,45 @@ export default {
     state: getDefaultState(),
 
     getters: {
-        filteredTasks: (state, getters, rootState) => (status) => {
-            return Object.values(rootState.tasker.items).filter((task) => task.status === status)
+        tasks: (s, gs, rootState) => (projectId) => {
+            return rootState.tasker.items[projectId].tasks
         },
+        todoGroups: (s, gs, rootState) => (projectID) => {
+            return rootState.tasker.items.projectId.todoGroups
+        }
     },
 
     actions: {
-        fetchTasks: ({ commit, state }, { projectId }) => {
-            return new Promise((resolve, reject) => {
-                firebase.firestore()
-                    .collection('tasker')
-                    .doc(projectId)
-                    .collection('tasks')
-                    .onSnapshot((s) => {
-                        s.docs.map(d => {
-                            const id = d.id;
-                            commit('setItem', { item: d.data(), id, resource: 'tasker' }, { root: true });
-                            return d.data()
-                        });
-                        resolve(state.items);
-                    })
-            })
-        },
-        fetchTodoGroups: ({ dispatch }, { projectId }) =>
+        fetchTasksRef: ({ dispatch }, { projectId }) =>
             dispatch('fetchItem', {
                 id: projectId, resource: 'tasker'
-            }, { root: true })
-        ,
-        createTask(ctx, { projectId, task, todoGroups }) {
-            return new Promise((resolve, reject) => {
-                updateTodoGroups(todoGroups, projectId).then(() => {
-                    firebase.firestore()
-                        .collection('tasker')
-                        .doc(projectId)
-                        .collection('tasks')
-                        .add(task)
-                        .then(() => {
-                            resolve();
-                        })
-                })
-            })
-        },
-        updateTask(_, { task, projectId }) {
-            firebase.firestore()
-                .collection('tasker')
-                .doc(projectId)
-                .collection('tasks')
-                .doc(task['_key'])
-                .update(task)
-        },
-        deleteTask({ commit }, { taskId, projectId }) {
-            firebase.firestore()
-                .collection('tasker')
-                .doc(projectId)
-                .collection('tasks')
-                .doc(taskId)
-                .delete()
-                .then(() => {
-                    commit('resetState')
-                })
-
-        },
-        createTasker(_, { id, firstTask }) {
-            firebase.firestore()
+            }, { root: true }),
+        createTasker(_, { id }) {
+            return firebase.firestore()
                 .collection('tasker')
                 .doc(id)
                 .set({
-                    todoGroups: []
+                    todoGroups: [],
+                    tasks: []
                 })
+        },
+        updateTodoGroupsArray(_, { todoGroups, projectId }) {
             return firebase.firestore()
                 .collection('tasker')
-                .doc(id)
-                .collection('tasks')
-                .add(firstTask)
+                .doc(projectId)
+                .update({ todoGroups })
         },
-        delTasker(_, { projectId }) {
+        updateTasksArray(_, { tasks, projectId }) {
+            return firebase.firestore()
+                .collection('tasker')
+                .doc(projectId)
+                .update({ tasks })
+        },
+        deleteTasker(_, { projectId }) {
             return firebase.firestore()
                 .collection('tasker')
                 .doc(projectId)
                 .delete()
-        },
-        updateTodoGroupsArray(_, { todoGroups, projectId }) {
-            return updateTodoGroups(todoGroups, projectId)
         }
     },
 
