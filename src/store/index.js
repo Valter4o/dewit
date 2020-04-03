@@ -8,6 +8,7 @@ import tasker from './modules/tasker'
 import auth from './modules/auth'
 import user from './modules/user'
 import tags from './modules/tags'
+import tasks from './modules/tasks'
 
 Vue.use(Vuex)
 
@@ -21,7 +22,8 @@ export default new Vuex.Store({
     auth,
     user,
     tasker,
-    tags
+    tags,
+    tasks
   },
 
   getters: {
