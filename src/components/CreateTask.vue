@@ -64,15 +64,18 @@ export default {
           }
           todoGroups.push(id)
 
-          this.createTask({ projectId, task, todoGroups }).then(() => {
-            this.title = ''
-            this.description = ''
-            this.close()
+          this.createTask({ projectId, task, todoGroups }).then((id) => {
+            task._key = id
+            this.updateTask({ task, projectId }).then(() => {
+              this.title = ''
+              this.description = ''
+              this.close()
+            })
           })
         })
       })
     },
-    ...mapActions('tasker', ['createTask', 'fetchTodoGroups']),
+    ...mapActions('tasker', ['createTask', 'fetchTodoGroups', 'updateTask']),
     ...mapActions('todoGroups', ['createTodoGroup']),
   },
 }

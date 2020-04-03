@@ -107,16 +107,17 @@ export default {
     deleteT() {
       const projectId = this.$router.currentRoute.params.id
       const todoGroupId = this.task.todoGroup
-      const todoGroups = Object.keys(this.$store.state.todoGroups.items).filter(
-        (id) => id !== todoGroupId
-      )
-      this.deleteTask({ taskId: this.task['_key'], projectId }).then(() => {
-        this.updateTodoGroupsArray({ todoGroups, projectId })
-        this.deleteTodoGroup({ todoGroupId })
-        this.delTasker({ projectId })
-        this.fetchTasks({ projectId })
-        this.close()
-        this.$router.push({ name: 'Home' })
+      this.deleteTodoGroup({ todoGroupId }).then(() => {
+        const todoGroups = Object.keys(
+          this.$store.state.todoGroups.items
+        ).filter((id) => id !== todoGroupId)
+        this.deleteTask({ taskId: this.task['_key'], projectId }).then(() => {
+          this.updateTodoGroupsArray({ todoGroups, projectId })
+          this.delTasker({ projectId })
+          this.fetchTasks({ projectId })
+          this.close()
+          this.$router.push({ name: 'Home' })
+        })
       })
     },
     complete() {
