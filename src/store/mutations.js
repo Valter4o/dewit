@@ -7,7 +7,7 @@ export default {
             item['_key'] = id;
             Vue.set(state[resource].items, id, item);
         } catch (err) {
-            console.log(err);
+            console.log('Error in setItem mutation');
         }
     },
     removeItem(state, { id, resource }) {
