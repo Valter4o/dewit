@@ -153,8 +153,9 @@ export default {
       this.edit = !this.edit
     },
     editTask() {
-      const projectId = this.$router.currentRoute.params.id
-      this.updateTask({ task: this.task, projectId })
+      const taskId = this.task._key
+
+      this.updateTask({ task: this.task, taskId })
       this.edit = false
     },
     addTag(tag) {
@@ -163,17 +164,17 @@ export default {
       if (!task.tags.find((t) => t.value === tag.value)) {
         task.tags.push(tag)
 
-        const projectId = this.$router.currentRoute.params.id
+        const taskId = this.task._key
 
-        this.updateTask({ task, projectId })
+        this.updateTask({ task, taskId })
       }
     },
 
     removeTag(tag) {
-      const projectId = this.$router.currentRoute.params.id
+      const taskId = this.task._key
 
       this.task.tags.splice(this.task.tags.indexOf(tag), 1)
-      this.updateTask({ task: this.task, projectId })
+      this.updateTask({ task: this.task, taskId })
     },
 
     addComment() {
@@ -181,7 +182,7 @@ export default {
         const name = this.user.username ? this.user.username : this.user.email
         const avatarUrl = this.user.avatarUrl ? this.user.avatarUrl : ''
 
-        const projectId = this.$router.currentRoute.params.id
+        const taskId = this.task._key
         const newComment = {
           avatarUrl,
           text: this.newComment,
@@ -189,7 +190,7 @@ export default {
           commentTime: Date.now(),
         }
         this.task.comments.unshift(newComment)
-        this.updateTask({ task: this.task, projectId })
+        this.updateTask({ task: this.task, taskId })
         this.newComment = ''
       }
     },
@@ -200,13 +201,8 @@ export default {
     changeTagsShow() {
       this.tagDialog = !this.tagDialog
     },
-    ...mapActions('tasker', [
-      'updateTask',
-      'deleteTask',
-      'fetchTasks',
-      'delTasker',
-      'updateTodoGroupsArray',
-    ]),
+    ...mapActions('tasks', ['updateTask']),
+    ...mapActions('tasker', ['updateTodoGroupsArray']),
     ...mapActions('todoGroups', ['deleteTodoGroup']),
     ...mapGetters('auth', ['authUser']),
   },

@@ -28,7 +28,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   props: {
     dialog: {
@@ -50,32 +51,38 @@ export default {
     submit() {
       const projectId = this.$router.currentRoute.params.id
 
-      this.fetchTodoGroups({ projectId }).then(() => {
-        const todoGroups = Object.keys(this.$store.state.todoGroups.items)
-        this.createTodoGroup().then((id) => {
-          const task = {
-            title: this.title,
-            description: this.description,
-            status: 'Inbox',
-            todoGroup: id,
-            createdAt: Date.now(),
-            comments: [],
-            tags: [],
-          }
-          todoGroups.push(id)
+      const todoGroups = this.todoGroups()(projectId)
+      const tasks = this.tasks()(projectId)
 
-          this.createTask({ projectId, task, todoGroups }).then((id) => {
-            task._key = id
-            this.updateTask({ task, projectId }).then(() => {
+      this.createTodoGroup().then((id) => {
+        const task = {
+          title: this.title,
+          description: this.description,
+          status: 'Inbox',
+          todoGroup: id,
+          createdAt: Date.now(),
+          comments: [],
+          tags: [],
+        }
+        todoGroups.push(id)
+
+        this.createTask({ task }).then((res) => {
+          tasks.push(res.id)
+          this.updateTasksArray({ tasks, projectId }).then(() => {
+            this.updateTodoGroupsArray({ todoGroups, projectId }).then(() => {
               this.title = ''
               this.description = ''
+
               this.close()
             })
           })
         })
       })
     },
-    ...mapActions('tasker', ['createTask', 'fetchTodoGroups', 'updateTask']),
+    ...mapActions('tasker', ['updateTasksArray', 'updateTodoGroupsArray']),
+    ...mapGetters('tasker', ['todoGroups', 'tasks']),
+
+    ...mapActions('tasks', ['createTask', 'updateTask']),
     ...mapActions('todoGroups', ['createTodoGroup']),
   },
 }

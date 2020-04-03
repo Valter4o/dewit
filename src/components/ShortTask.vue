@@ -145,7 +145,7 @@ export default {
     update() {
       const projectId = this.$router.currentRoute.params.id
 
-      this.updateTask({ task: this.task, projectId })
+      this.updateTask({ task: this.task, taskId: this.task._key })
     },
     displayDialog() {
       this.dialog = true
@@ -153,7 +153,7 @@ export default {
     close() {
       this.dialog = !this.dialog
     },
-    ...mapActions('tasker', ['updateTask']),
+    ...mapActions('tasks', ['updateTask']),
     ...mapActions('todoGroups', ['fetchGroup']),
   },
 

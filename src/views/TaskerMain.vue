@@ -59,23 +59,22 @@ export default {
     fetchTasksMethod() {
       this.fetchTasksRef({ projectId: this.id }).then((data) => {
         const ids = this.tasks()(this.id)
-        if (ids.length > 0) {
-          this.fetchTasks({ ids }).then(() => {
-            this.asyncDataStatus_fetched()
-          })
-        } else {
+        this.fetchTasks({ ids }).then(() => {
           this.asyncDataStatus_fetched()
-        }
+        })
       })
     },
     ...mapActions('tasker', ['fetchTasksRef']),
     ...mapGetters('tasker', ['tasks']),
-    ...mapActions('tasks', ['fetchTasks']),
+    ...mapActions('tasks', ['fetchTasks', 'resetState']),
     ...mapActions('projects', ['fetchProject']),
   },
 
   created() {
     this.fetchTasksMethod()
+  },
+  destroyed() {
+    this.resetState()
   },
 }
 </script>
