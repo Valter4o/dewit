@@ -7,16 +7,16 @@ export default {
     },
 
     actions: {
-        fetchGroups: ({ dispatch }, { ids }) =>
-            dispatch('fetchItems', {
-                ids,
+        fetchGroup: ({ dispatch }, { id }) =>
+            dispatch('fetchItem', {
+                id,
                 resource: 'todoGroups'
             }, {
                 root: true
             }),
-        fetchGroup: ({ dispatch }, { id }) =>
-            dispatch('fetchItem', {
-                id,
+        fetchGroups: ({ dispatch }, { ids }) =>
+            dispatch('fetchItems', {
+                ids,
                 resource: 'todoGroups'
             }, {
                 root: true

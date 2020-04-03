@@ -14,8 +14,8 @@ export default {
         tasks: (s, gs, rootState) => (projectId) => {
             return rootState.tasker.items[projectId].tasks
         },
-        todoGroups: (s, gs, rootState) => (projectID) => {
-            return rootState.tasker.items.projectId.todoGroups
+        todoGroups: (s, gs, rootState) => (projectId) => {
+            return rootState.tasker.items[projectId].todoGroups
         }
     },
 

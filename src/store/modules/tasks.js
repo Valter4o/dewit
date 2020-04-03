@@ -1,10 +1,14 @@
 import firebase from 'firebase/app'
 
+const getDefaultState = () => {
+    return {
+        items: {},
+    }
+}
+
 export default {
     namespaced: true,
-    state: {
-        items: {},
-    },
+    state: getDefaultState(),
 
     getters: {
         filteredTasks: (state, getters, rootState) => (status) => {
@@ -38,5 +42,13 @@ export default {
                 .doc(taskId)
                 .delete()
         },
+        resetState({ commit }) {
+            commit('resetState')
+        }
     },
+    mutations: {
+        resetState(state) {
+            Object.assign(state, getDefaultState())
+        }
+    }
 }
