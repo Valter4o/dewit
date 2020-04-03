@@ -34,7 +34,7 @@
 
 <script>
 import Column from '@/components/ColumnTasker'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
@@ -57,25 +57,25 @@ export default {
 
   methods: {
     fetchTasksMethod() {
-      const request = this.fetchTasks({ projectId: this.id })
-      setTimeout(() => {
-        request.then((data) => {
+      this.fetchTasksRef({ projectId: this.id }).then((data) => {
+        const ids = this.tasks()(this.id)
+        if (ids.length > 0) {
+          this.fetchTasks({ ids }).then(() => {
+            this.asyncDataStatus_fetched()
+          })
+        } else {
           this.asyncDataStatus_fetched()
-        })
-      }, 1000)
+        }
+      })
     },
-    ...mapActions('tasker', ['fetchTasks']),
+    ...mapActions('tasker', ['fetchTasksRef']),
+    ...mapGetters('tasker', ['tasks']),
+    ...mapActions('tasks', ['fetchTasks']),
     ...mapActions('projects', ['fetchProject']),
   },
 
   created() {
-    if (!this.$store.state.projects.items[this.id]) {
-      this.fetchProject({ id: this.id }).then(() => {
-        this.fetchTasksMethod()
-      })
-    } else {
-      this.fetchTasksMethod()
-    }
+    this.fetchTasksMethod()
   },
 }
 </script>
