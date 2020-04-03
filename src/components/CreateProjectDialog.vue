@@ -55,9 +55,10 @@ export default {
     create() {
       this.creating = true
       const users = []
+
       const user = {
         _key: this.authUser()._key,
-        name: this.authUser().name,
+        name: this.authUser().username,
         role: 'Creator',
       }
 
@@ -65,7 +66,7 @@ export default {
 
       const project = {
         name: this.name,
-        description: this.description,
+        description: this.description ? this.description : '',
         users,
       }
 
@@ -77,17 +78,7 @@ export default {
         })
 
         this.createTodoGroup().then((todoGroupId) => {
-          const firstTask = {
-            status: 'Inbox',
-            title: `Welcome to the tasker for ${project.name}`,
-            description: 'You may delete this task and start making your own',
-            comments: [],
-            tags: [],
-            todoGroup: todoGroupId,
-            createdAt: Date.now(),
-          }
-
-          this.createTasker({ id, firstTask }).then(() => {
+          this.createTasker({ id }).then(() => {
             this.updateUser({ id: u._key, user: u }).then(() => {
               this.createProjectTags({ id }).then(() => {
                 this.creating = false
