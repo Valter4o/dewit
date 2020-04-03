@@ -122,17 +122,17 @@ export default {
 
     checkTodo(todo) {
       todo.marked = !todo.marked
-      this.updateTodo({ todos: this.todos, groupId: this.id })
+      this.updateTodos({ todos: this.todos, groupId: this.id })
     },
 
     deleteTodo(todo) {
       playSound('Gooood')
 
       const todos = this.todos.filter((td) => td !== todo)
-      this.updateTodo({ todos, groupId: this.id })
+      this.updateTodos({ todos, groupId: this.id })
     },
 
-    ...mapActions('todoGroups', ['fetchGroup', 'updateTodo']),
+    ...mapActions('todoGroups', ['fetchGroup', 'updateTodos']),
   },
 
   created() {
