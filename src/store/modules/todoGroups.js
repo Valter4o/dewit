@@ -22,27 +22,19 @@ export default {
                 root: true
             }),
 
-        createTodo(_, { todos, groupId }) {
+        updateTodos(_, { todos, groupId }) {
             firebase.firestore()
                 .collection('todoGroups')
                 .doc(groupId)
                 .update({ todos })
         },
 
-        updateTodo(_, { todos, groupId }) {
-            firebase.firestore()
-                .collection('todoGroups')
-                .doc(groupId)
-                .update({ todos })
-        },
         createTodoGroup() {
             return new Promise((resolve, reject) => {
                 firebase.firestore()
                     .collection('todoGroups')
                     .add({
-                        todos: [
-
-                        ]
+                        todos: []
                     })
                     .then((docRef) => {
                         resolve(docRef.id);
