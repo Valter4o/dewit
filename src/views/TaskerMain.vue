@@ -58,14 +58,13 @@ export default {
   methods: {
     fetchTasksMethod() {
       this.fetchTasksRef({ projectId: this.id }).then((data) => {
-        const ids = this.tasks()(this.id)
+        const ids = data.tasks
         this.fetchTasks({ ids }).then(() => {
           this.asyncDataStatus_fetched()
         })
       })
     },
     ...mapActions('tasker', ['fetchTasksRef']),
-    ...mapGetters('tasker', ['tasks']),
     ...mapActions('tasks', ['fetchTasks', 'resetState']),
     ...mapActions('projects', ['fetchProject']),
   },

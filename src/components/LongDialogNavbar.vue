@@ -118,10 +118,18 @@ export default {
           //
         )
         this.deleteTask({ taskId: this.task._key, taskId }).then(() => {
-          this.updateTodoGroupsArray({ todoGroups, projectId })
-          this.updateTasksArray({ tasks, projectId })
-          this.close()
-          this.$router.push({ name: 'Home' })
+          this.updateTodoGroupsArray({ todoGroups, projectId }).then(() => {
+            this.updateTasksArray({ tasks, projectId }).then(() => {
+              this.resetState().then(() => {
+                this.fetchTasksRef({ projectId }).then((data) => {
+                  const ids = data.tasks
+                  this.fetchTasks({ ids }).then(() => {
+                    this.close()
+                  })
+                })
+              })
+            })
+          })
         })
       })
     },
@@ -130,10 +138,19 @@ export default {
       this.task.status = 'Done'
       this.updateTask({ task: this.task, taskId })
     },
-    ...mapActions('tasker', ['updateTodoGroupsArray', 'updateTasksArray']),
+    ...mapActions('tasker', [
+      'updateTodoGroupsArray',
+      'updateTasksArray',
+      'fetchTasksRef',
+    ]),
     ...mapGetters('tasker', ['todoGroups', 'tasks']),
 
-    ...mapActions('tasks', ['updateTask', 'deleteTask']),
+    ...mapActions('tasks', [
+      'updateTask',
+      'deleteTask',
+      'fetchTasks',
+      'resetState',
+    ]),
     ...mapActions('todoGroups', ['deleteTodoGroup']),
     ...mapGetters('auth', ['authUser']),
   },

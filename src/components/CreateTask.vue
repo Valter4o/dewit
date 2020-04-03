@@ -70,19 +70,28 @@ export default {
           tasks.push(res.id)
           this.updateTasksArray({ tasks, projectId }).then(() => {
             this.updateTodoGroupsArray({ todoGroups, projectId }).then(() => {
-              this.title = ''
-              this.description = ''
+              this.fetchTasksRef({ projectId }).then((data) => {
+                const ids = data.tasks
+                this.fetchTasks({ ids }).then(() => {
+                  this.title = ''
+                  this.description = ''
 
-              this.close()
+                  this.close()
+                })
+              })
             })
           })
         })
       })
     },
-    ...mapActions('tasker', ['updateTasksArray', 'updateTodoGroupsArray']),
+    ...mapActions('tasker', [
+      'updateTasksArray',
+      'updateTodoGroupsArray',
+      'fetchTasksRef',
+    ]),
     ...mapGetters('tasker', ['todoGroups', 'tasks']),
 
-    ...mapActions('tasks', ['createTask', 'updateTask']),
+    ...mapActions('tasks', ['createTask', 'updateTask', 'fetchTasks']),
     ...mapActions('todoGroups', ['createTodoGroup']),
   },
 }
