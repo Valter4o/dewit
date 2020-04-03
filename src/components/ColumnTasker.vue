@@ -104,7 +104,7 @@ export default {
     changeDialog() {
       this.createTaskDialog = !this.createTaskDialog
     },
-    ...mapGetters('tasker', ['filteredTasks']),
+    ...mapGetters('tasks', ['filteredTasks']),
   },
 }
 </script>
