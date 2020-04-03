@@ -50,13 +50,13 @@ export default {
         const todos = this.todos
         todos.push(todo)
 
-        this.createTodo({ todos, groupId: this.groupId })
+        this.updateTodos({ todos, groupId: this.groupId })
         this.newTodoValue = ''
 
         playSound('Do it')
       }
     },
-    ...mapActions('todoGroups', ['createTodo']),
+    ...mapActions('todoGroups', ['updateTodos']),
   },
 }
 </script>
