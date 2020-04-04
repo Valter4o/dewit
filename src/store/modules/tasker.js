@@ -56,6 +56,7 @@ export default {
     mutations: {
         resetState(state) {
             Object.assign(state, getDefaultState())
+            return Promise.resolve()
         }
     }
 }

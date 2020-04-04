@@ -23,7 +23,7 @@ export default {
             }),
 
         updateTodos(_, { todos, groupId }) {
-            firebase.firestore()
+            return firebase.firestore()
                 .collection('todoGroups')
                 .doc(groupId)
                 .update({ todos })

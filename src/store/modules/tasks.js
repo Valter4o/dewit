@@ -31,13 +31,13 @@ export default {
                 .add(task)
         },
         updateTask(_, { task, taskId }) {
-            firebase.firestore()
+            return firebase.firestore()
                 .collection('tasks')
                 .doc(taskId)
                 .update(task)
         },
         deleteTask({ commit }, { taskId }) {
-            firebase.firestore()
+            return firebase.firestore()
                 .collection('tasks')
                 .doc(taskId)
                 .delete()
