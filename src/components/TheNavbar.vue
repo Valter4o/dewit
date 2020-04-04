@@ -1,13 +1,11 @@
 <template>
   <v-app-bar app clipped-left color="red" dense>
     <v-app-bar-nav-icon @click.stop="showHideSidebar()" />
-    <v-toolbar-title class="mr-12 align-center">
-      <router-link to="/home" class="title">
-        <span>
-          DEWIT
-        </span>
-      </router-link>
-    </v-toolbar-title>
+    <template>
+      <v-btn @click="redirect('Home')" rounded fab small>
+        <Home />
+      </v-btn>
+    </template>
 
     <v-spacer />
 
@@ -32,12 +30,14 @@
 <script>
 import Login from '@/components/LoginDialog'
 import Register from '@/components/RegisterDialog'
+import Home from 'vue-material-design-icons/Home'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
     Login,
     Register,
+    Home,
   },
   computed: {
     loggedIn() {
@@ -48,6 +48,13 @@ export default {
     },
   },
   methods: {
+    redirect(name) {
+      if (this.$router.currentRoute.name !== name) {
+        this.$router.push({
+          name,
+        })
+      }
+    },
     showHideSidebar() {
       this.$emit('changeSideBar')
     },
@@ -61,3 +68,9 @@ export default {
   },
 }
 </script>
+
+<style module>
+.homeBtn {
+  margin-top: 10px;
+}
+</style>
