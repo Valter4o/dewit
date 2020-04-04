@@ -101,9 +101,15 @@ export default {
     deleteProj() {
       let user = this.authUser()
       user.projects = user.projects.filter((p) => p.id !== this.id)
+      this.todoGroups()(this.id).forEach((todoGroupId) => {
+        this.deleteTodoGroup({ todoGroupId })
+      })
+      this.tasks()(this.id).forEach((taskId) => {
+        this.deleteTask({ taskId })
+      })
       this.updateUser({ user, id: user._key }).then(() => {
         this.delTags({ id: this.id }).then(() => {
-          this.delTasker({ projectId: this.id }).then(() => {
+          this.deleteTasker({ projectId: this.id }).then(() => {
             this.deleteProject({ id: this.id }).then(() => {
               this.$router.push({ name: 'Home' })
             })
@@ -111,9 +117,13 @@ export default {
         })
       })
     },
+    ...mapGetters('tasker', ['tasks', 'todoGroups']),
+
     ...mapActions('projects', ['fetchProject', 'deleteProject']),
     ...mapActions('user', ['updateUser']),
-    ...mapActions('tasker', ['delTasker']),
+    ...mapActions('tasker', ['deleteTasker']),
+    ...mapActions('tasks', ['deleteTask']),
+    ...mapActions('todoGroups', ['deleteTodoGroup']),
     ...mapActions('tags', ['delTags']),
     ...mapGetters('auth', ['authUser']),
   },
