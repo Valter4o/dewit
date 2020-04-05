@@ -6,21 +6,35 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn class="mx-4" dark icon>
-          <Facebook />
-        </v-btn>
-        <v-btn class="mx-4" dark icon>
-          <GithubCircle />
-        </v-btn>
-        <v-btn class="mx-4" dark icon>
-          <TwitterCircle />
-        </v-btn>
-        <v-btn class="mx-4" dark icon>
-          <Instagram />
-        </v-btn>
-        <v-btn class="mx-4" dark icon>
-          <Linkedin />
-        </v-btn>
+        <a href="https://www.facebook.com/profile.php?id=100001093678046">
+          <v-btn class="mx-4" dark icon>
+            <Facebook />
+          </v-btn>
+        </a>
+
+        <a href="https://github.com/Valter4o/dewit">
+          <v-btn class="mx-4" dark icon>
+            <GithubCircle />
+          </v-btn>
+        </a>
+
+        <a href="https://twitter.com/MsValter2001">
+          <v-btn class="mx-4" dark icon>
+            <TwitterCircle />
+          </v-btn>
+        </a>
+
+        <a href="https://www.instagram.com/valter4o/">
+          <v-btn class="mx-4" dark icon>
+            <Instagram />
+          </v-btn>
+        </a>
+
+        <a href="https://www.linkedin.com/in/valentin-tashkov-55a268185/">
+          <v-btn class="mx-4" dark icon>
+            <Linkedin />
+          </v-btn>
+        </a>
       </v-card-title>
 
       <v-card-text class="py-2 white--text text-center">
