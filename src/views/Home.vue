@@ -1,39 +1,41 @@
 <template>
-  <div class="container">
-    <h1 :class="$style.headerLarge">
-      DEWIT
-    </h1>
-    <p :class="$style.textLarge">
-      <!--  -->
-      Welcome to the best project manager you have ever seen
-    </p>
-    <template v-if="load">
-      <v-progress-linear
-        indeterminate
-        color="yellow darken-2"
-      ></v-progress-linear>
-    </template>
-    <template v-else>
-      <template v-if="loggedIn">
-        <template v-if="asyncDataStatus_ready">
-          <v-data-table
-            :headers="headers"
-            :items="projects"
-            :hide-default-footer="true"
-            @click:row="redirectProject"
-          >
-          </v-data-table>
-        </template>
-        <template v-else>
+  <div>
+    <template v-if="loggedIn">
+      <div class="container">
+        <h1 :class="$style.headerLarge">
+          DEWIT
+        </h1>
+        <p :class="$style.textLarge">
+          <!--  -->
+          Welcome to the best project manager you have ever seen
+        </p>
+        <template v-if="load">
           <v-progress-linear
             indeterminate
             color="yellow darken-2"
           ></v-progress-linear>
         </template>
-      </template>
-      <template v-else>
-        <h3>Loggin or Register to see your projects</h3>
-      </template>
+        <template v-else>
+          <template v-if="asyncDataStatus_ready">
+            <v-data-table
+              :headers="headers"
+              :items="projects"
+              :hide-default-footer="true"
+              @click:row="redirectProject"
+            >
+            </v-data-table>
+          </template>
+          <template v-else>
+            <v-progress-linear
+              indeterminate
+              color="yellow darken-2"
+            ></v-progress-linear>
+          </template>
+        </template>
+      </div>
+    </template>
+    <template v-else>
+      <NotLoggedIn />
     </template>
   </div>
 </template>
@@ -42,8 +44,12 @@
 import firebase from 'firebase'
 import { mapActions, mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
+import NotLoggedIn from '@/components/NotLoggedIn'
 
 export default {
+  components: {
+    NotLoggedIn,
+  },
   data() {
     return {
       load: false,
