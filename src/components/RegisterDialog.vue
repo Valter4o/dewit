@@ -117,8 +117,15 @@ export default {
         this.dialog = false
       })
     },
-    authWithGoogle() {},
-    ...mapActions('auth', ['registerUserWithEmailAndPassword']),
+    authWithGoogle() {
+      this.authWithGoogle().then(() => {
+        this.dialog = false
+      })
+    },
+    ...mapActions('auth', [
+      'registerUserWithEmailAndPassword',
+      'authWithGoogle',
+    ]),
   },
 }
 </script>

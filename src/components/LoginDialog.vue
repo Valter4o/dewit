@@ -67,11 +67,18 @@ export default {
       const { email, password } = this.form
       this.signInWithEmailAndPassword({ email, password }).then((user) => {
         this.dialog = false
-        this.$forceUpdate()
       })
     },
-    authWithGoogle() {},
-    ...mapActions('auth', ['signInWithEmailAndPassword', 'fetchAuthUser']),
+    authWithGoogle() {
+      this.authWithGoogle().then(() => {
+        this.dialog = false
+      })
+    },
+    ...mapActions('auth', [
+      'signInWithEmailAndPassword',
+      'fetchAuthUser',
+      'authWithGoogle',
+    ]),
   },
 }
 </script>
