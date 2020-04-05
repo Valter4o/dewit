@@ -1,58 +1,61 @@
 <template>
   <div>
-    <template v-if="loggedIn">
-      <div class="container">
-        <h1 :class="$style.headerLarge">
-          DEWIT
-        </h1>
-        <p :class="$style.textLarge">
-          <!--  -->
-          Welcome to the best project manager you have ever seen
-        </p>
-        <template v-if="load">
-          <v-progress-linear
-            indeterminate
-            color="yellow darken-2"
-          ></v-progress-linear>
+    <v-parallax :src="img" height="600">
+      <template v-if="load">
+        <intersecting-circles-spinner
+          :class="$style.loader"
+          :animation-duration="1200"
+          :size="200"
+          color="#ff1d5e"
+        />
+      </template>
+      <template v-else>
+        <template v-if="loggedIn">
+          <div class="container">
+            <h1 :class="$style.headerLarge">
+              Your Projects
+            </h1>
+            <template v-if="asyncDataStatus_ready">
+              <v-data-table
+                :headers="headers"
+                :items="projects"
+                :hide-default-footer="true"
+                @click:row="redirectProject"
+              >
+              </v-data-table>
+            </template>
+            <template v-else>
+              <v-progress-linear
+                indeterminate
+                color="yellow darken-2"
+              ></v-progress-linear>
+            </template>
+          </div>
         </template>
         <template v-else>
-          <template v-if="asyncDataStatus_ready">
-            <v-data-table
-              :headers="headers"
-              :items="projects"
-              :hide-default-footer="true"
-              @click:row="redirectProject"
-            >
-            </v-data-table>
-          </template>
-          <template v-else>
-            <v-progress-linear
-              indeterminate
-              color="yellow darken-2"
-            ></v-progress-linear>
-          </template>
+          <NotLoggedIn />
         </template>
-      </div>
-    </template>
-    <template v-else>
-      <NotLoggedIn />
-    </template>
+      </template>
+    </v-parallax>
   </div>
 </template>
 
 <script>
-import firebase from 'firebase'
 import { mapActions, mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 import NotLoggedIn from '@/components/NotLoggedIn'
+import { IntersectingCirclesSpinner } from 'epic-spinners'
 
 export default {
   components: {
     NotLoggedIn,
+    IntersectingCirclesSpinner,
   },
   data() {
     return {
       load: false,
+      img:
+        'https://www.cv-library.co.uk/career-advice/wp-content/uploads/2018/06/What-is-it-like-working-in-IT.jpg',
       headers: [
         {
           text: 'Project Name',
@@ -134,11 +137,11 @@ export default {
 
   created() {
     this.load = true
+    this.loggedIn
     setTimeout(() => {
-      this.userId
       this.getProjects()
       this.load = false
-    }, 1500)
+    }, 2000)
   },
   updated() {
     this.getProjects()
@@ -147,7 +150,12 @@ export default {
 </script>
 
 <style module>
+.loader {
+  margin-top: 100px;
+  margin-left: 650px;
+}
 .headerLarge {
+  color: green;
   font-size: 100px;
 }
 
