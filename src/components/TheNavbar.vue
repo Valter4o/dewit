@@ -78,7 +78,7 @@ export default {
     },
     logout() {
       this.signOut().then(() => {
-        this.$router.push({ name: 'Home' })
+        this.redirect('Home')
       })
     },
     ...mapActions('auth', ['signOut']),
