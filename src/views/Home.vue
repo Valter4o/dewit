@@ -1,16 +1,16 @@
 <template>
   <div>
-    <v-parallax :src="img" height="600">
-      <template v-if="load">
-        <intersecting-circles-spinner
-          :class="$style.loader"
-          :animation-duration="1200"
-          :size="200"
-          color="#ff1d5e"
-        />
-      </template>
-      <template v-else>
-        <template v-if="loggedIn">
+    <template v-if="load">
+      <intersecting-circles-spinner
+        :class="$style.loader"
+        :animation-duration="1200"
+        :size="200"
+        color="#ff1d5e"
+      />
+    </template>
+    <template v-else>
+      <template v-if="loggedIn">
+        <v-parallax :src="img" height="600">
           <div class="container">
             <h1 :class="$style.headerLarge">
               Your Projects
@@ -31,12 +31,12 @@
               ></v-progress-linear>
             </template>
           </div>
-        </template>
-        <template v-else>
-          <NotLoggedIn />
-        </template>
+        </v-parallax>
       </template>
-    </v-parallax>
+      <template v-else>
+        <NotLoggedIn />
+      </template>
+    </template>
   </div>
 </template>
 
