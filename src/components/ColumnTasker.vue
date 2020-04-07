@@ -46,7 +46,7 @@
         </template>
       </template>
       <template v-else>
-        <NoProjects />
+        <NoTasks />
       </template>
     </v-col>
   </v-card>
@@ -54,7 +54,7 @@
 
 <script>
 import ShortTask from '@/components/ShortTask'
-import NoProjects from '@/components/NoProjects'
+import NoTasks from '@/components/NoTasks'
 import CreateTask from '@/components/CreateTask'
 import InboxArrowDownOutline from 'vue-material-design-icons/InboxArrowDownOutline'
 import Clippy from 'vue-material-design-icons/Clippy'
@@ -70,7 +70,7 @@ export default {
     CreateTask,
     ProgressWrench,
     Check,
-    NoProjects,
+    NoTasks,
   },
 
   props: {
