@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar>
+  <v-app-bar width="100%" :color="color">
     <v-avatar>
       <img src="../assets/images/defaultUser/yoda.png" alt="Y" />
     </v-avatar>
@@ -88,6 +88,10 @@ export default {
   props: {
     task: {
       type: Object,
+      required: true,
+    },
+    color: {
+      type: String,
       required: true,
     },
   },

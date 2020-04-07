@@ -1,14 +1,13 @@
 <template>
   <div>
-    <v-dialog
-      v-model="dialog"
-      max-width="60%"
-      persistent
-      overlay-opacity="0"
-      hide-overlay
-    >
-      <v-card>
-        <Navbar @close="close" @edit="changeEditable" :task="task" />
+    <v-dialog v-model="dialog" max-width="60%" persistent>
+      <v-card width="98%">
+        <Navbar
+          @close="close"
+          @edit="changeEditable"
+          :task="task"
+          :color="navbarColor"
+        />
         <br />
 
         <v-row>
@@ -139,6 +138,15 @@ export default {
     },
     assignedUser() {
       return this.task.assignedUser ? this.task.assignedUser.name : false
+    },
+    navbarColor() {
+      const colors = {
+        Inbox: 'orange',
+        'To do': 'red',
+        'In Progress': 'blue',
+        Done: 'green',
+      }
+      return colors[this.task.status]
     },
   },
 
