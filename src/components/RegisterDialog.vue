@@ -32,21 +32,13 @@
 
           <v-col cols="12" md="6">
             <v-text-field
-              type="password"
               v-model="form.password"
-              :rules="passwordRules"
               label="Password"
-              required
+              disabled
             ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              type="password"
-              v-model="form.repassword"
-              :rules="rePasswordRules"
-              label="Repeat Password"
-              required
-            ></v-text-field>
+            <v-btn @click="generatePassword">
+              Generate pass
+            </v-btn>
           </v-col>
         </v-container>
       </v-form>
@@ -81,7 +73,6 @@ export default {
         username: '',
         email: '',
         password: '',
-        repassword: '',
       },
       usernameRules: [
         () => !!this.form.username || 'Username is required',
@@ -92,17 +83,6 @@ export default {
       emailRules: [
         () => !!this.form.email || 'E-mail is required',
         () => /.+@.+/.test(this.form.email) || 'E-mail must be valid',
-      ],
-      passwordRules: [
-        () => !!this.form.password || 'Password is required',
-        () =>
-          this.form.password.length >= 5 ||
-          'Password must be more than 5 characters',
-      ],
-      rePasswordRules: [
-        () => !!this.form.repassword || 'Repeat Password is required',
-        () =>
-          this.form.password === this.form.password || 'Passwords must match',
       ],
     }
   },
@@ -116,6 +96,11 @@ export default {
       }).then(() => {
         this.dialog = false
       })
+    },
+    generatePassword() {
+      this.form.password = Math.random()
+        .toString(36)
+        .slice(2)
     },
     authWithGoogle() {
       this.authWithGoogle({ register: true }).then(() => {
