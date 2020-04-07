@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="360" min-width="360" flat elevation="5">
+  <v-card class="mx-auto" min-width="100%" flat elevation="5">
     <v-list-item three-line>
       <v-list-item-content>
         <h3>Theese aren't the tasks you are looking for 👋</h3>
