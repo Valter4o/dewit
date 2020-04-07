@@ -27,18 +27,21 @@
         >{{ tag.value }}</v-btn
       >
       <v-footer color="white">
-        <template v-if="commentsCount > 0">
+        <template v-if="bottomIcons > 0">
           <CommentTextMultiple />
-          <span :class="$style.commentsCount">{{ commentsCount }}</span>
+          <span :class="$style.bottomIcons">{{ bottomIcons }}</span>
         </template>
 
         <template v-if="todos">
           <template v-if="todos.total > 0">
             <DnsOutline />
-            <span :class="$style.commentsCount">
+            <span :class="$style.bottomIcons">
               {{ todos.marked }}/{{ todos.total }}
             </span>
           </template>
+        </template>
+        <template v-if="task.dueDate">
+          <ClockAlert />
         </template>
         <v-spacer />
         <v-btn
@@ -68,6 +71,7 @@ import CommentTextMultiple from 'vue-material-design-icons/CommentTextMultiple'
 import DnsOutline from 'vue-material-design-icons/DnsOutline'
 import ArrowRightBoldOutline from 'vue-material-design-icons/ArrowRightBoldOutline'
 import ArrowLeftBoldOutline from 'vue-material-design-icons/ArrowLeftBoldOutline'
+import ClockAlert from 'vue-material-design-icons/ClockAlert'
 import LongDialog from '@/components/LongTaskDialog'
 import { mapActions } from 'vuex'
 
@@ -78,6 +82,7 @@ export default {
     LongDialog,
     ArrowRightBoldOutline,
     ArrowLeftBoldOutline,
+    ClockAlert,
   },
 
   data() {
@@ -106,7 +111,7 @@ export default {
   },
 
   computed: {
-    commentsCount() {
+    bottomIcons() {
       return this.task.comments.length
     },
     todos() {
@@ -165,7 +170,7 @@ export default {
 
 <style module>
 .headerTask,
-.commentsCount {
+.bottomIcons {
   margin-left: 10px;
   margin-right: 10px;
 }

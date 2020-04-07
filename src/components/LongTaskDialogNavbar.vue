@@ -55,6 +55,13 @@
 
           <v-list-item-title :class="$style.menuTitle">Edit</v-list-item-title>
         </v-list-item>
+
+        <v-list-item>
+          <CalendarDialog :task="task" />
+          <v-list-item-title :class="$style.menuTitle"
+            >Set Due Date</v-list-item-title
+          >
+        </v-list-item>
       </v-list>
     </v-menu>
 
@@ -70,6 +77,7 @@ import ViewComfy from 'vue-material-design-icons/ViewComfy'
 import DeleteForever from 'vue-material-design-icons/DeleteForever'
 import ShieldCheck from 'vue-material-design-icons/ShieldCheck'
 import SquareEditOutline from 'vue-material-design-icons/SquareEditOutline'
+import CalendarDialog from '@/components/CalendarDialog'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -79,6 +87,7 @@ export default {
     DeleteForever,
     ShieldCheck,
     SquareEditOutline,
+    CalendarDialog,
   },
   data() {
     return {
@@ -107,7 +116,7 @@ export default {
     changeEditable() {
       this.$emit('edit')
     },
-
+    setDate() {},
     deleteT() {
       const projectId = this.$router.currentRoute.params.id
       const taskId = this.task._key

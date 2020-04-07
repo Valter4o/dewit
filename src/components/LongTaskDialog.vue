@@ -30,6 +30,7 @@
               <p>
                 {{ task.description }}
               </p>
+              <h4 v-if="dueDate">Due Date:{{ dueDate }}</h4>
             </template>
 
             <v-btn rounded color="blue" @click="changeTodoDialog">
@@ -100,7 +101,7 @@
 import Tags from '@/components/TagsShowDialog'
 import Comment from '@/components/TaskComment'
 import TodoList from '@/components/TodoList'
-import Navbar from '@/components/LongDialogNavbar'
+import Navbar from '@/components/LongTaskDialogNavbar'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -138,6 +139,9 @@ export default {
     },
     assignedUser() {
       return this.task.assignedUser ? this.task.assignedUser.name : false
+    },
+    dueDate() {
+      return this.task.dueDate ? this.task.dueDate : false
     },
     navbarColor() {
       const colors = {
