@@ -20,10 +20,12 @@ export default {
                 })
                 .then(() => dispatch('fetchAuthUser'))
         },
-        authWithGoogle({ dispatch }) {
+        authWithGoogle({ dispatch }, { register }) {
             const provider = new firebase.auth.GoogleAuthProvider()
             firebase.auth().signInWithPopup(provider).then(({ user: { displayName, email, uid } }) => {
-                return dispatch('user/createUser', { id: uid, username: displayName, email }, { root: true })
+                if (register) {
+                    return dispatch('user/createUser', { id: uid, username: displayName, email }, { root: true })
+                }
             })
         },
         fetchAuthUser({ dispatch, commit }) {

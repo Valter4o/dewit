@@ -70,7 +70,7 @@ export default {
       })
     },
     authWithGoogle() {
-      this.authWithGoogle().then(() => {
+      this.authWithGoogle({ register: false }).then(() => {
         this.dialog = false
       })
     },

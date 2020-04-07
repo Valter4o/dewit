@@ -118,7 +118,7 @@ export default {
       })
     },
     authWithGoogle() {
-      this.authWithGoogle().then(() => {
+      this.authWithGoogle({ register: true }).then(() => {
         this.dialog = false
       })
     },
