@@ -3,8 +3,8 @@
     <v-list-item three-line>
       <v-list-item-content>
         <v-list-item-title>
-          <v-avatar color="indigo" size="35">
-            <img :src="comment.avatarUrl" :alt="comment.name" />
+          <v-avatar color="red" size="40">
+            <img src="../assets/images/defaultUser/yoda.png" />
           </v-avatar>
           {{ comment.name }}</v-list-item-title
         >

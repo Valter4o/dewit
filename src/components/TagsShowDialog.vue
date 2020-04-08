@@ -4,27 +4,25 @@
     overlay-opacity="0"
     hide-overlay
     max-width="40%"
-    v-model="tagsDialogProp"
+    v-model="dialog"
   >
+    <template v-slot:activator="{ on }">
+      <v-btn rounded color="blue" v-on="on">
+        +
+      </v-btn>
+    </template>
     <v-card outlined class="mx-auto">
       <h1 :class="$style.tagHeader">
         Tags
-        <v-btn :class="$style.headerButton" @click="changeCreateShow" rounded>
-          +
+        <Create @create="create" />
+        <v-btn rounded @click="deleting = !deleting">
+          <span v-if="deleting">
+            Done
+          </span>
+          <span v-else>
+            Delete
+          </span>
         </v-btn>
-        <v-btn
-          :class="$style.headerButton"
-          rounded
-          @click="deleting = !deleting"
-        >
-          Delete Tag
-        </v-btn>
-
-        <Create
-          :createDialogProp="createDialog"
-          @close="changeCreateShow"
-          @create="create"
-        />
       </h1>
       <v-spacer />
 
@@ -49,7 +47,7 @@
           </template>
         </v-btn>
       </v-container>
-      <v-btn rounded @click="close" :class="$style.closeBtn">
+      <v-btn rounded @click="dialog = false" :class="$style.closeBtn">
         Close
       </v-btn>
     </v-card>
@@ -68,24 +66,15 @@ export default {
 
   mixins: [asyncDataStatus],
 
-  props: {
-    tagsDialogProp: {
-      type: Boolean,
-      required: true,
-    },
-  },
-
   data() {
     return {
       createDialog: false,
       deleting: false,
+      dialog: false,
     }
   },
 
   computed: {
-    dialog() {
-      return this.tagsDialogProp
-    },
     projectId() {
       return this.$router.currentRoute.params.id
     },
@@ -95,14 +84,7 @@ export default {
   },
 
   methods: {
-    close() {
-      this.$emit('closeTags')
-    },
-    changeCreateShow() {
-      this.createDialog = !this.createDialog
-    },
     create({ value, color }) {
-      this.changeCreateShow()
       const tags = this.tags
       tags.push({ value, color })
       this.updateTags({ tags, id: this.projectId })
@@ -130,12 +112,6 @@ export default {
 .tagHeader {
   margin-left: 20px;
 }
-
-.headerButton {
-  margin-left: 20px;
-  margin-top: 8px;
-}
-
 .closeBtn {
   margin-left: 80%;
   margin-top: 8px;
