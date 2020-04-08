@@ -32,28 +32,17 @@
               </p>
               <h4 v-if="dueDate">Due Date:{{ dueDate }}</h4>
             </template>
-
-            <v-btn rounded color="blue" @click="changeTodoDialog">
-              Open Todo List for this task
-              <TodoList
-                :mainDialog="todoDialog"
-                :id="task.todoGroup"
-                @closeTodoList="closeTodoList"
-              />
-            </v-btn>
             <br />
-            <div>
-              <h3>Comments</h3>
-              <v-card
-                outlined
-                class="mx-auto"
-                max-width="344"
+            <TodoList :id="task.todoGroup" />
+            <br />
+            <h3>Comments:</h3>
+            <v-card class="mx-auto" max-width="344">
+              <Comment
                 v-for="comment in task.comments"
                 :key="comment.author"
-              >
-                <Comment :comment="comment" />
-              </v-card>
-            </div>
+                :comment="comment"
+              />
+            </v-card>
           </v-col>
 
           <v-col>
@@ -61,12 +50,7 @@
               <v-app-bar dense flat color="white">
                 <h3>Tags</h3>
                 <v-spacer />
-                <v-btn rounded @click="changeTagsShow">+</v-btn>
-                <Tags
-                  :tagsDialogProp="tagDialog"
-                  @closeTags="changeTagsShow"
-                  @addTag="addTag"
-                />
+                <Tags @addTag="addTag" />
               </v-app-bar>
               <v-btn
                 :class="$style.tag"
@@ -124,10 +108,8 @@ export default {
 
   data() {
     return {
-      tagDialog: false,
       newComment: '',
       edit: false,
-      todoDialog: false,
     }
   },
   computed: {
@@ -157,9 +139,6 @@ export default {
   methods: {
     close() {
       this.$emit('close')
-    },
-    closeTodoList() {
-      this.todoDialog = !this.todoDialog
     },
     changeEditable() {
       this.edit = !this.edit
@@ -192,11 +171,9 @@ export default {
     addComment() {
       if (this.newComment) {
         const name = this.user.username ? this.user.username : this.user.email
-        const avatarUrl = this.user.avatarUrl ? this.user.avatarUrl : ''
 
         const taskId = this.task._key
         const newComment = {
-          avatarUrl,
           text: this.newComment,
           name,
           commentTime: Date.now(),
@@ -205,13 +182,6 @@ export default {
         this.updateTask({ task: this.task, taskId })
         this.newComment = ''
       }
-    },
-    changeTodoDialog() {
-      this.todoDialog = !this.todoDialog
-    },
-
-    changeTagsShow() {
-      this.tagDialog = !this.tagDialog
     },
     ...mapActions('tasks', ['updateTask']),
     ...mapActions('tasker', ['updateTodoGroupsArray']),

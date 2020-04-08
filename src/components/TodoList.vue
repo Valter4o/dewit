@@ -1,13 +1,13 @@
 <template>
-  <v-dialog
-    v-model="mainDialog"
-    persistent
-    max-width="500px"
-    overlay-opacity="0"
-  >
+  <v-dialog v-model="dialog" persistent max-width="500px" overlay-opacity="0">
+    <template v-slot:activator="{ on }">
+      <v-btn rounded color="blue" v-on="on">
+        Open Todo List for this task
+      </v-btn>
+    </template>
     <v-card>
       <template v-if="asyncDataStatus_ready">
-        <v-btn btn color="green" @click="close">
+        <v-btn btn color="green" @click="dialog = false">
           Close
         </v-btn>
         <v-simple-table>
@@ -97,10 +97,6 @@ export default {
   },
 
   props: {
-    mainDialog: {
-      type: Boolean,
-      required: true,
-    },
     id: {
       type: String,
       required: true,
@@ -116,10 +112,6 @@ export default {
   mixins: [asyncDataStatus],
 
   methods: {
-    close() {
-      this.$emit('closeTodoList')
-    },
-
     checkTodo(todo) {
       todo.marked = !todo.marked
       this.updateTodos({ todos: this.todos, groupId: this.id })
@@ -136,12 +128,9 @@ export default {
   },
 
   created() {
-    const request = this.fetchGroup({ id: this.id })
-    setTimeout(() => {
-      request.then(() => {
-        this.asyncDataStatus_fetched()
-      })
-    }, 1000)
+    this.fetchGroup({ id: this.id }).then(() => {
+      this.asyncDataStatus_fetched()
+    })
   },
 }
 </script>
