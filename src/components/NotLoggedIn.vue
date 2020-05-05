@@ -2,7 +2,6 @@
   <div>
     <v-content>
       <section>
-        <v-parallax :src="imageLink.main" height="600">
           <v-layout column align-center justify-center class="white--text">
             <h1
               class="dark--text mb-2 display-1 text-xs-center"
@@ -20,7 +19,6 @@
             <br />
             <Register />
           </v-layout>
-        </v-parallax>
       </section>
 
       <section>
@@ -86,13 +84,11 @@
       </section>
 
       <section>
-        <v-parallax :src="imageLink.bottom" height="380">
           <div class="headline white--text mb-3 text-xs-center">
             <h1>
               What are you waiting for? REGISTER ALREADY
             </h1>
           </div>
-        </v-parallax>
       </section>
     </v-content>
   </div>

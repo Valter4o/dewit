@@ -42,6 +42,10 @@ v-content {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  background-color: black;
+}
+router-view {
+  background-color: black;
 }
 
 .title {
