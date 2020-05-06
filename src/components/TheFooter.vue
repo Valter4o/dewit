@@ -46,8 +46,8 @@
 
 <script>
 import Facebook from 'vue-material-design-icons/Facebook'
-import GithubCircle from 'vue-material-design-icons/GithubCircle'
-import TwitterCircle from 'vue-material-design-icons/TwitterCircle'
+import GithubCircle from 'vue-material-design-icons/Github'
+import TwitterCircle from 'vue-material-design-icons/Twitter'
 import Instagram from 'vue-material-design-icons/Instagram'
 import Linkedin from 'vue-material-design-icons/Linkedin'
 
