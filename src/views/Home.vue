@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="$style.main">
     <template v-if="load">
       <intersecting-circles-spinner
         :class="$style.loader"
@@ -10,52 +10,53 @@
     </template>
     <template v-else>
       <template v-if="loggedIn">
-        <v-parallax :src="img" height="600">
-          <div class="container">
-            <h1 :class="$style.headerLarge">
-              Your Projects
-            </h1>
-            <template v-if="asyncDataStatus_ready">
-              <v-data-table
-                :headers="headers"
-                :items="projects"
-                :hide-default-footer="true"
-                @click:row="redirectProject"
-              >
-              </v-data-table>
-            </template>
-            <template v-else>
-              <v-progress-linear
-                indeterminate
-                color="yellow darken-2"
-              ></v-progress-linear>
-            </template>
-          </div>
-        </v-parallax>
+        <div class="container">
+          <h1 :class="$style.headerLarge">Your Projects</h1>
+          <template v-if="asyncDataStatus_ready">
+            <v-data-table
+              dark
+              :headers="headers"
+              :items="projects"
+              :hide-default-footer="true"
+              @click:row="redirectProject"
+            ></v-data-table>
+          </template>
+          <template v-else>
+            <v-progress-linear
+              indeterminate
+              color="yellow darken-2"
+            ></v-progress-linear>
+          </template>
+        </div>
       </template>
       <template v-else>
         <NotLoggedIn />
+        <Footer />
       </template>
     </template>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import asyncDataStatus from '@/mixins/asyncDataStatus'
 import NotLoggedIn from '@/components/NotLoggedIn'
+import Footer from '@/components/TheFooter'
+
 import { IntersectingCirclesSpinner } from 'epic-spinners'
+
+import asyncDataStatus from '@/mixins/asyncDataStatus'
+import userData from '@/mixins/userData'
+
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
     NotLoggedIn,
     IntersectingCirclesSpinner,
+    Footer,
   },
   data() {
     return {
       load: false,
-      img:
-        'https://www.cv-library.co.uk/career-advice/wp-content/uploads/2018/06/What-is-it-like-working-in-IT.jpg',
       headers: [
         {
           text: 'Project Name',
@@ -73,26 +74,19 @@ export default {
     }
   },
 
-  mixins: [asyncDataStatus],
+  mixins: [asyncDataStatus, userData],
 
   computed: {
-    userId() {
-      if (this.loggedIn) {
-        return this.authUser()._key
-      }
-    },
     projectIds() {
-      if (this.loggedIn) {
-        return this.authUser().projects.map((project) => project.id)
-      }
+      const accesor = (user) => user.projects.map((project) => project.id)
+      return this.getUserData(accesor)
     },
     projects() {
       const displayProjects = []
       const projects = Object.entries(this.$store.state.projects.items).forEach(
         ([id, { name, users }]) => {
-          const { role } = users.find((user) => user._key === this.userId)
-            ? users.find((user) => user._key === this.userId)
-            : ''
+          const { role } =
+            users.find((user) => user._key === this.loggedInId()) ?? {}
 
           if (role) {
             const validObj = {
@@ -107,9 +101,6 @@ export default {
       )
       return displayProjects
     },
-    loggedIn() {
-      return this.authUser()
-    },
   },
 
   methods: {
@@ -121,30 +112,23 @@ export default {
         },
       })
     },
-    getProjects() {
+    async getProjects() {
       if (this.loggedIn) {
-        const request = this.fetchProjects({ ids: this.projectIds })
-        setTimeout(() => {
-          request.then(() => {
-            this.asyncDataStatus_fetched()
-          })
-        }, 1000)
+        this.fetchProjects({ ids: await this.projectIds }).then((res) => {
+          this.asyncDataStatus_fetched()
+        })
       }
     },
     ...mapActions('projects', ['fetchProjects']),
-    ...mapGetters('auth', ['authUser']),
+    ...mapGetters('auth', ['loggedIn']),
   },
 
   created() {
     this.load = true
-    this.loggedIn
-    setTimeout(() => {
-      this.getProjects()
-      this.load = false
-    }, 2000)
-  },
-  updated() {
     this.getProjects()
+    setTimeout(() => {
+      this.load = false
+    }, 1000)
   },
 }
 </script>
@@ -155,7 +139,7 @@ export default {
   margin-left: 650px;
 }
 .headerLarge {
-  color: green;
+  color: goldenrod;
   font-size: 100px;
 }
 
