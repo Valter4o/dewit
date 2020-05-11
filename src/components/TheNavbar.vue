@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app clipped-left color="blue" dense>
+  <v-app-bar app clipped-left color="black" dense>
     <v-app-bar-nav-icon @click.stop="showHideSidebar()" />
     <template>
       <v-btn @click="redirect('Home')" rounded fab small>
@@ -10,7 +10,7 @@
     <v-spacer />
 
     <template v-if="!load">
-      <template v-if="!loggedIn">
+      <template v-if="!loggedInId">
         <div class="text-center">
           <Login />
         </div>
@@ -20,11 +20,11 @@
         </div>
       </template>
       <div class="text-center" v-else>
-        <span
-          >Welcome
-          <v-btn color="blue">{{ username }}</v-btn>
+        <span>
+          Welcome
+          <v-btn color="#f2c92b" rounded>{{ username }}</v-btn>
         </span>
-        <v-btn rounded color="primary" dark @click="logout">Logout</v-btn>
+        <v-btn rounded color="#f2c92b" dark @click="logout">Logout</v-btn>
       </div>
     </template>
     <template v-else>
@@ -32,7 +32,7 @@
         :animation-duration="1000"
         :dot-size="15"
         :dots-num="3"
-        color="#ff1d5e"
+        color="#f2c92b"
       />
     </template>
   </v-app-bar>
@@ -41,8 +41,13 @@
 <script>
 import Login from '@/components/LoginDialog'
 import Register from '@/components/RegisterDialog'
+
+import userData from '@/mixins/userData'
+
 import Home from 'vue-material-design-icons/Home'
+
 import { mapActions, mapGetters } from 'vuex'
+
 import { HollowDotsSpinner } from 'epic-spinners'
 
 export default {
@@ -52,17 +57,18 @@ export default {
     Home,
     HollowDotsSpinner,
   },
+
+  mixins: [userData],
+
   data() {
     return {
       load: true,
     }
   },
   computed: {
-    loggedIn() {
-      return this.authUser()
-    },
     username() {
-      return this.authUser().username
+      const accesor = (user) => user.username
+      return this.getUserData(accesor)
     },
   },
   methods: {
@@ -82,7 +88,7 @@ export default {
       })
     },
     ...mapActions('auth', ['signOut']),
-    ...mapGetters('auth', ['authUser']),
+    ...mapGetters('auth', ['loggedInId']),
   },
 
   created() {
@@ -96,5 +102,6 @@ export default {
 <style module>
 .homeBtn {
   margin-top: 10px;
+  background-color: goldenrod;
 }
 </style>
