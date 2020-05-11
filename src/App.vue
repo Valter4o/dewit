@@ -7,21 +7,17 @@
     <v-content align="center" justify="center">
       <router-view />
     </v-content>
-
-    <Footer />
   </v-app>
 </template>
 
 <script>
 import Sidebar from './components/TheSidebar'
 import Navbar from './components/TheNavbar'
-import Footer from './components/TheFooter'
 
 export default {
   components: {
     Sidebar,
     Navbar,
-    Footer,
   },
 
   data() {
@@ -31,7 +27,7 @@ export default {
   },
 
   created() {
-    this.$vuetify.theme.dark = false
+    this.$vuetify.theme.dark = true
   },
 }
 </script>
