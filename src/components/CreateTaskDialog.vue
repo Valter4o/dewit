@@ -1,7 +1,12 @@
 <template>
   <v-dialog max-width="600" persistent v-model="dialog">
+    <template v-slot:activator="{ on }">
+      <v-btn class="mx-2" fab small dark color="indigo" v-on="on">
+        <v-icon dark>mdi-plus</v-icon>
+      </v-btn>
+    </template>
     <v-card class="mx-auto" max-width="100%">
-      <v-btn fab small :class="$style.closeBtn" @click="close">
+      <v-btn fab small :class="$style.closeBtn" @click="dialog = false">
         x
       </v-btn>
       <h3 :class="$style.title">
@@ -31,23 +36,14 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  props: {
-    dialog: {
-      type: Boolean,
-      required: true,
-    },
-  },
   data() {
     return {
       title: '',
       description: '',
+      dialog: false,
     }
   },
   methods: {
-    close() {
-      this.$emit('closeDialog')
-    },
-
     submit() {
       const projectId = this.$router.currentRoute.params.id
 
@@ -76,7 +72,7 @@ export default {
                   this.title = ''
                   this.description = ''
 
-                  this.close()
+                  this.dialog = false
                 })
               })
             })

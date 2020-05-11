@@ -25,18 +25,8 @@
         <v-spacer
           ><h2>{{ status }}</h2>
         </v-spacer>
-        <v-btn
-          v-if="status === 'Inbox'"
-          class="mx-2"
-          fab
-          small
-          dark
-          color="indigo"
-          @click="changeDialog"
-        >
-          <v-icon dark>mdi-plus</v-icon>
-        </v-btn>
-        <CreateTask :dialog="createTaskDialog" @closeDialog="changeDialog" />
+
+        <CreateTask v-if="status === 'Inbox'" />
       </v-app-bar>
       <br />
       <template v-if="tasks">
@@ -55,11 +45,13 @@
 <script>
 import ShortTask from '@/components/ShortTask'
 import NoTasks from '@/components/NoTasks'
-import CreateTask from '@/components/CreateTask'
+import CreateTask from '@/components/CreateTaskDialog'
+
 import InboxArrowDownOutline from 'vue-material-design-icons/InboxArrowDownOutline'
 import Clippy from 'vue-material-design-icons/Clippy'
 import ProgressWrench from 'vue-material-design-icons/ProgressWrench'
 import Check from 'vue-material-design-icons/Check'
+
 import { mapGetters } from 'vuex'
 
 export default {
@@ -84,12 +76,6 @@ export default {
     },
   },
 
-  data() {
-    return {
-      createTaskDialog: false,
-    }
-  },
-
   computed: {
     tasks() {
       const tasks = this.filteredTasks()(this.status)
@@ -101,9 +87,6 @@ export default {
   },
 
   methods: {
-    changeDialog() {
-      this.createTaskDialog = !this.createTaskDialog
-    },
     ...mapGetters('tasks', ['filteredTasks']),
   },
 }
