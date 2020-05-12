@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import NotLoggedIn from '@/components/NotLoggedIn'
-import Footer from '@/components/TheFooter'
+import NotLoggedIn from '@/components/dummy/NotLoggedIn'
+import Footer from '@/components/common/TheFooter'
 
 import { IntersectingCirclesSpinner } from 'epic-spinners'
 

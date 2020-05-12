@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import Column from '@/components/ColumnTasker'
+import Column from '@/pages/ColumnTasker'
 import { mapActions, mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 
