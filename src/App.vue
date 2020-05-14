@@ -31,20 +31,3 @@ export default {
   },
 }
 </script>
-
-<style>
-v-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: black;
-}
-router-view {
-  background-color: black;
-}
-
-.title {
-  word-break: break-all;
-}
-</style>

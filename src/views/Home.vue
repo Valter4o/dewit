@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.main">
+  <div>
     <template v-if="load">
       <intersecting-circles-spinner
         :class="$style.loader"
@@ -127,7 +127,7 @@ export default {
     this.load = true
     this.getProjects()
     setTimeout(() => {
-      this.load = false
+      // this.load = false
     }, 1000)
   },
 }
@@ -135,21 +135,11 @@ export default {
 
 <style module>
 .loader {
-  margin-top: 100px;
-  margin-left: 650px;
+  margin-top: 15%;
+  margin-left: 45%;
 }
 .headerLarge {
   color: goldenrod;
   font-size: 100px;
-}
-
-.textLarge {
-  font-size: 50px;
-}
-
-.link {
-  font-size: 40px;
-  text-decoration-line: none;
-  color: #42b883;
 }
 </style>
