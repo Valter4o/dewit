@@ -34,11 +34,18 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="blue darken-1" text @click="dialog = false"
-            >Close</v-btn
-          >
+          <v-btn color="blue" text @click="dialog = false">Close</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="login">Login</v-btn>
+          <template v-if="!load">
+            <v-btn color="blue" text @click="login">Login</v-btn>
+          </template>
+          <template v-else>
+            <fingerprint-spinner
+              :animation-duration="1500"
+              :size="64"
+              color="blue"
+            />
+          </template>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -47,13 +54,16 @@
 
 <script>
 import LoginVariant from 'vue-material-design-icons/LoginVariant'
+import { FingerprintSpinner } from 'epic-spinners'
 import { mapActions } from 'vuex'
 
 export default {
   components: {
     LoginVariant,
+    FingerprintSpinner,
   },
   data: () => ({
+    load: false,
     dialog: false,
     form: {
       username: '',
@@ -65,8 +75,10 @@ export default {
   methods: {
     login() {
       const { email, password } = this.form
+      this.load = true
       this.signInWithEmailAndPassword({ email, password }).then((user) => {
         this.dialog = false
+        this.$router.go()
       })
     },
     authWithGoogle() {
