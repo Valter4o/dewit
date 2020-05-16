@@ -9,7 +9,7 @@
       />
     </template>
     <template v-else>
-      <template v-if="loggedIn">
+      <template v-if="loggedInId()">
         <div class="container">
           <h1 :class="$style.headerLarge">Your Projects</h1>
           <template v-if="asyncDataStatus_ready">
@@ -30,7 +30,7 @@
         </div>
       </template>
       <template v-else>
-        <NotLoggedIn />
+        <NotLoggedInId />
         <Footer />
       </template>
     </template>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import NotLoggedIn from '@/components/dummy/NotLoggedIn'
+import NotLoggedInId from '@/components/dummy/NotLoggedIn'
 import Footer from '@/components/common/TheFooter'
 
 import { IntersectingCirclesSpinner } from 'epic-spinners'
@@ -50,7 +50,7 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
-    NotLoggedIn,
+    NotLoggedInId,
     IntersectingCirclesSpinner,
     Footer,
   },
@@ -113,22 +113,22 @@ export default {
       })
     },
     async getProjects() {
-      if (this.loggedIn) {
+      if (this.loggedInId) {
         this.fetchProjects({ ids: await this.projectIds }).then((res) => {
+          this.load = false
           this.asyncDataStatus_fetched()
         })
       }
     },
     ...mapActions('projects', ['fetchProjects']),
-    ...mapGetters('auth', ['loggedIn']),
+    ...mapGetters('auth', ['loggedInId']),
   },
 
   created() {
-    this.load = true
-    this.getProjects()
-    setTimeout(() => {
-      // this.load = false
-    }, 1000)
+    if (this.loggedInId()) {
+      this.load = true
+      this.getProjects()
+    }
   },
 }
 </script>
