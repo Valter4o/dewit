@@ -13,7 +13,7 @@ export default {
     loggedInId(state) {
       const id = localStorage._id
 
-      if (id) {
+      if (id && id !== 'null') {
         state.authId = id
         return id
       }

@@ -8,7 +8,7 @@
     </template>
 
     <v-spacer />
-    <template v-if="load && username">
+    <template v-if="load && !username">
       <hollow-dots-spinner
         :animation-duration="1000"
         :dot-size="15"
@@ -17,7 +17,7 @@
       />
     </template>
     <template v-else>
-      <template v-if="!loggedInId">
+      <template v-if="!loggedInId()">
         <div class="text-center">
           <Login />
         </div>
@@ -61,7 +61,7 @@ export default {
 
   data() {
     return {
-      load: true,
+      load: false,
       username: '',
     }
   },
@@ -72,6 +72,7 @@ export default {
           name,
         })
       }
+      this.$router.go()
     },
     async getUsername() {
       const accesor = (user) => user.username
@@ -90,10 +91,13 @@ export default {
   },
 
   created() {
-    this.getUsername()
-    setTimeout(() => {
-      this.load = false
-    }, 1000)
+    if (this.loggedInId()) {
+      this.getUsername()
+      this.load = true
+      setTimeout(() => {
+        this.load = false
+      }, 1000)
+    }
   },
 }
 </script>
